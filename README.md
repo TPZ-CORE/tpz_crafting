@@ -1,6 +1,10 @@
 
 # TPZ-CORE Crafting
 
+## Requirements
+
+TPZ-Notify: https://github.com/TPZ-CORE/tpz_notify
+
 ## Screenshot Displays
 
 ![image](https://github.com/TPZ-CORE/tpz_crafting/assets/152554963/fdc4d63e-54ef-495f-a6eb-4c3bbc91eb32)
