@@ -419,7 +419,7 @@ Config.CraftingRecipes = {
     ['consumable_english_breakfast'] = {
         Category          = 'food_saloon',
 
-        RequiredBlueprint = 'blueprint_tent',
+        RequiredBlueprint = false,
 
         IsWeapon          = false,
         SerialNumber      = false,
