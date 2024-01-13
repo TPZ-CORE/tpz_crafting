@@ -1,0 +1,443 @@
+@import url('https://fonts.cdnfonts.com/css/chinese-rocks');
+
+
+@font-face {
+  font-family: crock;
+  src: url(../fonts/crock.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: HandWritten;
+  src: url(../fonts/Handwritten.woff) format('truetype');
+}
+
+body {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+
+    text-align: center;
+	justify-content: center;
+	align-items: center;
+
+}
+
+#crafting{
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+
+  margin-top: 10%;
+
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-position-x: center;
+
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  overflow: hidden;
+  width: 70%;
+  height: 70%;
+  
+  justify-content: center;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently */
+}
+
+#crafting-title {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "Handwritten", Handwritten, serif;
+  color: rgba(31, 31, 31, 0.747);
+
+  font-size: 2vw;
+  font-weight: 700;
+
+	width: 30vw;
+  margin-top: 4.4vw;
+  margin-left: 3.5vw;
+	text-align: center;
+
+}
+
+#crafting-description {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "Handwritten", Handwritten, serif;
+  color: rgba(31, 31, 31, 0.747);
+
+  font-size: 1.2vw;
+  font-weight: 650;
+
+	width: 30vw;
+  height: fit-content;
+
+  margin-top: 8.4vw;
+  margin-left: 3.5vw;
+	text-align: center;
+  white-space: pre-wrap;
+
+}
+
+/* Categories */
+
+#categories {
+  position: absolute;
+
+	overflow-y: scroll;
+
+	width: 30vw;
+  height: 21vw;
+
+  padding-left: 0.7vw;
+  padding-right: 0.5vw;
+  padding-top: 0.5vw;
+
+  margin-top: 15.4vw;
+  margin-left: 2.9vw;
+}
+
+#categories-label{
+  position: relative;
+  display: inline-block;
+
+  font-size: 1.5vw;
+  
+	color: rgba(34, 34, 34, 0.842);
+
+  font-family: "Handwritten", Handwritten, serif;
+
+  height: 2vw;
+  width: 30vw;
+
+  padding-top: 0.5vw;
+
+  text-align: center;
+
+
+}
+
+#categories-label:hover {
+  opacity: 0.7;
+}
+
+/* Recipes */
+
+#recipes {
+  position: absolute;
+
+	overflow-y: scroll;
+
+	width: 30vw;
+  height: 21vw;
+
+  padding-left: 0.7vw;
+  padding-right: 0.5vw;
+  padding-top: 0.5vw;
+
+  margin-top: 15.4vw;
+  margin-left: 2.9vw;
+}
+
+#recipes-label{
+  position: relative;
+  display: inline-block;
+
+  font-size: 1.5vw;
+
+
+	color: rgba(34, 34, 34, 0.842);
+
+  font-family: "Handwritten", Handwritten, serif;
+
+  height: 2vw;
+  width: 30vw;
+
+  padding-top: 0.5vw;
+
+  text-align: center;
+
+
+}
+
+#recipes-label:hover {
+  opacity: 0.7;
+}
+
+/* Selected Recipe */
+
+#recipe-image-background {
+  position: absolute;
+  display: inline-block;
+
+  margin-top: 20.5vw;
+  margin-left: 37.5vw;
+
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-position-x: center;
+
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  overflow: hidden;
+  width: 15%;
+  height: 17%;
+  
+  justify-content: center;
+
+  opacity: 0.7;
+
+  filter: grayscale(1) blur(1px) contrast(1.2) sepia(1);
+  -webkit-mask: radial-gradient(#000, #0009);
+
+  border: 2px solid rgba(37, 37, 37, 0.775);
+}
+
+#recipe-title {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "Handwritten", Handwritten, serif;
+  color: rgba(31, 31, 31, 0.747);
+
+  font-size: 2.2vw;
+  font-weight: 700;
+
+	width: 30vw;
+  margin-top: 4.4vw;
+  margin-left: 35.5vw;
+	text-align: center;
+}
+
+#recipe-description {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "Handwritten", Handwritten, serif;
+  color: rgba(31, 31, 31, 0.747);
+
+  font-size: 1.3vw;
+  font-weight: 650;
+
+	width: 30vw;
+  height: fit-content;
+
+  margin-top: 8.4vw;
+  margin-left: 35.5vw;
+	text-align: center;
+  white-space: pre-wrap;
+
+}
+
+#recipe-ingredients-title {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "Handwritten", Handwritten, serif;
+  color: rgba(31, 31, 31, 0.747);
+
+  font-size: 1.4vw;
+  font-weight: bold;
+
+	width: 27vw;
+  height: fit-content;
+
+  margin-top: 17.5vw;
+  margin-left: 36.5vw;
+	text-align: right;
+
+}
+
+/* Ingredients */
+
+#ingredients {
+  position: absolute;
+
+	overflow-y: scroll;
+
+	width: 26vw;
+  height: fit-content;
+
+  padding-left: 0.7vw;
+  padding-right: 0.5vw;
+  padding-top: 0.5vw;
+
+  margin-top: 19vw;
+  margin-left: 36.5vw;
+}
+
+#ingredients-label{
+  position: relative;
+  display: inline-block;
+
+  font-size: 1.2vw;
+
+	color: rgba(34, 34, 34, 0.842);
+
+  font-family: "Handwritten", Handwritten, serif;
+
+  height: 1.5vw;
+	width: 26vw;
+
+  text-align: right;
+}
+
+#recipe-craft-button {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "Handwritten", Handwritten, serif;
+  color: rgba(31, 31, 31, 0.747);
+
+  font-size: 1.4vw;
+  font-weight: bold;
+
+	width: fit-content;
+  height: fit-content;
+
+  margin-top: 31.4vw;
+  margin-left: 37.5vw;
+	text-align: left;
+}
+
+#recipe-craft-button:hover {
+  opacity: 0.7;
+}
+
+
+#recipe-insufficient-knowledge-title {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "crock", crock, serif;
+  color: rgba(129, 35, 35, 0.503);
+
+  font-size: 2.5vw;
+
+	width: 19vw;
+  margin-top: 16.4vw;
+  margin-left: 40.5vw;
+	text-align: center;
+
+  letter-spacing: .3rem;
+  -webkit-transform: rotate(10deg);
+
+  
+  filter: grayscale(1) blur(1px) contrast(1.2) sepia(1);
+  -webkit-mask: radial-gradient(#000, #0009);
+}
+
+#recipe-insufficient-knowledge-description {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "Handwritten", Handwritten, serif;
+  color: rgba(129, 35, 35, 0.603);
+
+  font-size: 1.1vw;
+  font-weight: 700;
+
+	width: 25vw;
+  height: fit-content;
+
+  margin-top: 28.4vw;
+  margin-left: 37.5vw;
+	text-align: left;
+  white-space: pre-wrap;
+
+}
+
+#recipe-insufficient-knowledge-button {
+  position: absolute;
+  display: inline-block;
+
+  font-family: "Handwritten", Handwritten, serif;
+  color: rgba(31, 31, 31, 0.747);
+
+  font-size: 1.4vw;
+  font-weight: bold;
+
+	width: 27vw;
+  height: fit-content;
+
+  margin-top: 33.4vw;
+  margin-left: 37.5vw;
+	text-align: right;
+}
+
+
+#recipe-insufficient-knowledge-button:hover {
+  opacity: 0.7;
+}
+
+/* Notifications */
+
+#notification_message {
+  position: absolute;
+
+  font-family: "crock", crock, serif;
+
+  padding-top: 0.5vw;
+
+  text-align: center;
+
+  font-size: 0.8vw;
+
+  width: 30vw;
+  height: 3vw;
+  
+  margin-top: -4vw;
+  margin-left: 20.6vw;
+
+  padding-top: 1vw;
+
+  background-image: url(../img/notify_bg.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+	background-size: cover;
+  white-space: pre-wrap;
+  opacity: 0.8;
+  
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 5px;
+  scroll-behavior: smooth;
+
+}
+/* Track */
+::-webkit-scrollbar-track {
+  border: 0.0px solid grey;
+  border-radius: 5px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(49, 49, 49, 0.8);
+  border-radius: 5px;
+}
+
+input[type=text] {
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: bold;
+
+	color:#2e351ee5;
+
+	text-align: center;
+  background-color: rgba(231, 231, 231, 0.781);
+	border: 1px solid rgba(129, 129, 129, 0.253);
+}
