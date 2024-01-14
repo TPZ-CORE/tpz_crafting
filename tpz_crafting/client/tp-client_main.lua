@@ -68,8 +68,8 @@ if Config.DevMode then
 
         TriggerEvent("tpz_core:ExecuteServerCallBack", "tpz_core:getPlayerData", function(data)
 
-            while not data.loaded do
-                Wait(1000)
+            if data == nil then
+                return
             end
 
             ClientData.Job            = data.job
