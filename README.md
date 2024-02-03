@@ -5,6 +5,13 @@
 
 TPZ-Notify: https://github.com/TPZ-CORE/tpz_notify
 
+# Installation
+
+1. When opening the zip file, open `tpz_crafting-main` directory folder and inside there will be another directory folder which is called as `tpz_crafting`, this directory folder is the one that should be exported to your resources (The folder which contains `fxmanifest.lua`).
+
+2. Add `ensure tpz_crafting` after `tpz_core` and its requirements in the resources.cfg or server.cfg, depends where your scripts are located.
+
+
 ## Screenshot Displays
 
 ![image](https://github.com/TPZ-CORE/tpz_crafting/assets/152554963/fdc4d63e-54ef-495f-a6eb-4c3bbc91eb32)
