@@ -1,6 +1,6 @@
 Config = {}
 
-Config.DevMode = true
+Config.DevMode = false
 Config.Debug   = false
 
 Config.PromptKey              = { key = 0x760A9C6F } -- G
