@@ -54,9 +54,9 @@ exports.tpz_core:getCoreAPI().addNewCallBack("tpz_crafting:canCraftRecipe", func
 
   end
 
-  --for item, quantity in pairs(requiredIngredients) do
-  --  TPZInv.removeItem(_source, item, quantity)
-  --end
+  for item, quantity in pairs(requiredIngredients) do
+    TPZInv.removeItem(_source, item, quantity)
+  end
 
   cb(contains)
 
