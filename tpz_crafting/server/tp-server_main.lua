@@ -71,7 +71,8 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(item)
       TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, PlayerData.steamName, PlayerData.username, PlayerData.identifier, PlayerData.charIdentifier, description, _c)
     end
 
-    xPlayer.disconnect(Locales['DEVTOOLS_INJECTION_DETECTED'])
+    --xPlayer.disconnect(Locales['DEVTOOLS_INJECTION_DETECTED'])
+    xPlayer.ban(Locales['DEVTOOLS_INJECTION_DETECTED'], -1)
     return
   end
 
@@ -99,7 +100,8 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(item)
       TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, PlayerData.steamName, PlayerData.username, PlayerData.identifier, PlayerData.charIdentifier, description, _c)
     end
 
-    xPlayer.disconnect(Locales['DEVTOOLS_INJECTION_DETECTED'])
+    xPlayer.ban(Locales['DEVTOOLS_INJECTION_DETECTED'], -1)
+    --xPlayer.disconnect(Locales['DEVTOOLS_INJECTION_DETECTED'])
     return
   end
 
