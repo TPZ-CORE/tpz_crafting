@@ -6,6 +6,7 @@ Locales = {
     ['NOT_ENOUGH_INVENTORY_SPACE']            = "You don't have enough inventory space.",
     ['NOT_ENOUGH_INVENTORY_SPACE_PICKUP']     = "You don't have enough inventory space to pickup for collecting its used ingredients.",
     ['NOT_BLUEPRINT']                         = "You don't have the required Blueprint to unlock this recipe.",
+    ['TARGET_ID_DOES_NOT_EXIST']              = "You don't have that item or weapon with the specified input unique id to repair.",
     ['PICKUP']                                = "Pickup ",
     ['PICKING_UP']                            = "Picking up ",
 

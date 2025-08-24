@@ -1,3 +1,5 @@
+local TPZ            = exports.tpz_core:getCoreAPI()
+
 local CraftedObjects = {}
 local AttachedEntity = nil
 
@@ -15,7 +17,7 @@ AddEventHandler("onResourceStop", function(resourceName)
         SetEntityAsNoLongerNeeded(AttachedEntity)
     end
 
-    local length = GetTableLength(CraftedObjects)
+    local length = TPZ.GetTableLength(CraftedObjects)
     if length <= 0 then
         return
     end
@@ -24,9 +26,6 @@ AddEventHandler("onResourceStop", function(resourceName)
         DeleteEntity(v.object)
         SetEntityAsNoLongerNeeded(v.object)
 
-        if Config.exp_target_menu.enabled then
-            TriggerEvent("exp_target_menu:RemoveEntityMenuItem", v.object, "tpz_crafting:PickupClosestCraftedObject")
-        end
     end
 
 end)
@@ -43,7 +42,7 @@ AddEventHandler('playerDropped', function (reason)
         SetEntityAsNoLongerNeeded(AttachedEntity)
     end
 
-    local length = GetTableLength(list)
+    local length = TPZ.GetTableLength(list)
     if length <= 0 then
         return
     end
@@ -133,18 +132,6 @@ PerformCraftingBuildByType = function(data, object)
     CraftedObjects[entity] = {}
     CraftedObjects[entity] = { model = object, object = entity, coords = {x = x, y = y, z = z}, recipe = data }
 
-    if Config.exp_target_menu.enabled then
-
-        local pickupLabel = Locales['PICKUP']
-
-        if Locales[object] then
-            pickupLabel = pickupLabel.. Locales[object]
-            TriggerEvent("exp_target_menu:SetModelName", GetHashKey(object), Locales[object])
-        end
-
-        TriggerEvent("exp_target_menu:AddEntityMenuItem", entity, "tpz_crafting:PickupClosestCraftedObject", pickupLabel, false)
-    end
-
     TriggerEvent("tpz_crafting:ResetEntityAlpha", entity, data.Duration)
 end
 
@@ -178,10 +165,6 @@ PickupPlacedObject = function(objectEntity, model, recipe)
         DeleteEntity(objectEntity)
         SetEntityAsNoLongerNeeded(objectEntity)
     
-        if Config.exp_target_menu.enabled then
-            TriggerEvent("exp_target_menu:RemoveEntityMenuItem", objectEntity, "tpz_crafting:PickupClosestCraftedObject")
-        end
-    
         CraftedObjects[objectEntity] = nil
 
         TriggerServerEvent("tpz_crafting:server:pickupPlacedObject", recipe.Ingredients)
@@ -212,96 +195,59 @@ AddEventHandler("tpz_crafting:ResetEntityAlpha", function(entity, duration)
 
 end)
 
--- The following event is triggered only for exp_target_menu for picking up crafted placed objects.
-RegisterNetEvent("tpz_crafting:PickupClosestCraftedObject")
-AddEventHandler("tpz_crafting:PickupClosestCraftedObject", function()
-    if GetPlayerData().HasCooldown then
-        return
-    end
-
-    local playerPed  = PlayerPedId()
-    local coords     = GetEntityCoords(playerPed)
-
-    local objectEntity, model, recipe = nil, nil, nil
-
-    for _, object in pairs (CraftedObjects) do
-
-        local objectId = GetClosestObjectOfType(coords, Config.exp_target_menu.range, joaat(object.model), false)
-        
-        if objectId ~= 0 then
-            objectEntity, model, recipe = objectId, object.model, object.recipe
-            break
-        end
-
-    end
-
-    if objectEntity == 0 or objectEntity == nil then
-        return
-    end
-
-
-    PickupPlacedObject(objectEntity, model, recipe)
-end)
-
-
 --[[-------------------------------------------------------
  Threads
 ]]---------------------------------------------------------
 
 -- The following thread is used for picking up crafted placed objects
--- which are not exp_target_menu supported.
+Citizen.CreateThread(function ()
 
-if not Config.exp_target_menu.enabled then
+    RegisterPickupActionPrompt()
 
-    Citizen.CreateThread(function ()
+    while true do
+        
+        Wait(0)
 
-        RegisterPickupActionPrompt()
+        local sleep  = true
 
-        while true do
+        local player = PlayerPedId()
+
+        local coords = GetEntityCoords(player)
+        local isDead = IsEntityDead(player)
+
+        local PlayerData = GetPlayerData()
+        
+        if not isDead and PlayerData.Loaded and not PlayerData.HasCooldown and not PlayerData.HasCraftingOpen then
+
+            local length = TPZ.GetTableLength(CraftedObjects)
+            if length > 0 then
+
+                for _, object in pairs (CraftedObjects) do
+                    
+                    local coordsDist  = vector3(coords.x, coords.y, coords.z)
+                    local coordsBuild = vector3(object.coords.x, object.coords.y, object.coords.z)
             
-            Wait(0)
+                    local distance    = #(coordsDist - coordsBuild)
 
-            local sleep  = true
+                    if distance <= Config.PickupObjectDistance then
+                        sleep = false
 
-            local player = PlayerPedId()
-    
-            local coords = GetEntityCoords(player)
-            local isDead = IsEntityDead(player)
+                        local pickupLabel = "Object"
 
-            local PlayerData = GetPlayerData()
-            
-            if not isDead and PlayerData.Loaded and not PlayerData.HasCooldown and not PlayerData.HasCraftingOpen then
+                        if Locales[object.model] then
+                            pickupLabel = Locales[object.model]
+                        end
 
-                local length = GetTableLength(CraftedObjects)
-                if length > 0 then
-
-                    for _, object in pairs (CraftedObjects) do
+                        local label = CreateVarString(10, 'LITERAL_STRING', pickupLabel)
                         
-                        local coordsDist  = vector3(coords.x, coords.y, coords.z)
-                        local coordsBuild = vector3(object.coords.x, object.coords.y, object.coords.z)
-                
-                        local distance    = #(coordsDist - coordsBuild)
-
-                        if distance <= Config.PickupObjectDistance then
-                            sleep = false
-
-                            local pickupLabel = "Object"
-
-                            if Locales[object.model] then
-                                pickupLabel = Locales[object.model]
-                            end
-
-                            local label = CreateVarString(10, 'LITERAL_STRING', pickupLabel)
-
-                            PromptSetActiveGroupThisFrame(PickupPrompts, label)
-        
-                            if PromptHasHoldModeCompleted(PickupPromptsList) then
-        
-                                PickupPlacedObject(object.object, object.model, object.recipe)
+                        local Prompts, PromptsList = GetPickupPromptData()
+                        PromptSetActiveGroupThisFrame(Prompts, label)
     
-                                Wait(1000)
-                            end
+                        if PromptHasHoldModeCompleted(PromptsList) then
+    
+                            PickupPlacedObject(object.object, object.model, object.recipe)
 
+                            Wait(1000)
                         end
 
                     end
@@ -310,11 +256,11 @@ if not Config.exp_target_menu.enabled then
 
             end
 
-            if sleep then
-                Citizen.Wait(1000)
-            end
-
         end
-    end)
 
-end
+        if sleep then
+            Citizen.Wait(1000)
+        end
+
+    end
+end)

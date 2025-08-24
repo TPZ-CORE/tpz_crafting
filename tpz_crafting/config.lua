@@ -13,12 +13,6 @@ Config.PickupObjectPromptKey  = { key = 0x760A9C6F } -- G
 -- The following option is saving all crafting locations data upon server restart hours (2-3 Minutes atleast before server restart is preferred).
 Config.RestartHours = { "7:57" , "13:57", "19:57", "1:57"}
 
--- Set to true if you are using exp_target_menu (Made by Milyon James)
--- There is also an option for every location, but this option is focused only for
--- picking objects - buildables which have been crafted.
-Config.exp_target_menu  = { enabled = false, range = 2.3 }
-
--- The following distance / range is used as above, but ONLY when exp_target_menu is not enabled.
 Config.PickupObjectDistance = 2.0
 
 -- The duration when a player is reading a Blueprint recipe for unlocking it.
@@ -85,10 +79,17 @@ Config.AnimationTypes = {
 
     ['CAMPFIRE'] = {
         Animation = "WORLD_HUMAN_FIRE_TEND_KNEEL",
-        AnimationBase =  nil,
+        AnimationBase = nil,
         AnimationScenario = true,
 
         ObjectAttachment  = false, -- Always false for Scenarios.
+    },
+
+    ['TABLE'] = {
+        Animation = 'WORLD_HUMAN_CLEAN_TABLE',
+        AnimationBase = nil,
+        AnimationScenario = true,
+        ObjectAttachment = false,
     },
 
     ['FURNACE'] = {
@@ -130,22 +131,6 @@ Config.CraftingBookItems = {
     
     },
 
-    ['crafting_fisherman_book'] = {
-
-        Header       = "Fishing Guide",
-        Description  = "",
-
-        Jobs = { 'fisherman' },
-
-        Categories = {
-            'baits',
-            'lures',
-            'lines',
-            'reels',
-            'hooks',
-        },
-    
-    }
 }
 
 
@@ -156,28 +141,17 @@ Config.CraftingBookItems = {
 -- The following will be the categories you will be using and their displays.
 Config.Categories = {
 
-    -- Default
-    ['food']        = { Label = "Cooking Recipes" },
-    ['crafts']      = { Label = "Crafts" },
-
-    -- Saloon
-    ['food_saloon'] = { Label = "Speciality Saloon Food Recipes" },
-
-    ['blacksmith']  = { Label = "Blacksmith Crafts" },
-
-    ['beekeepers']  = { Label = "Beekeepers Handcrafts & Honey Products" },
-
+    ['food']                  = { Label = "Cooking Recipes" },
+    ['crafts']                = { Label = "Crafts" },
+    ['food_saloon']           = { Label = "Speciality Saloon Food Recipes" },
+    ['blacksmith']            = { Label = "General Crafts" },
+    ['blacksmith_horses']     = { Label = "Horse Crafts" },
+    ['gunsmith_repairs']      = { Label = "Weapon Repairs" },
+    ['gunsmith_parts']        = { Label = "Weapon Parts" },
+    ['beekeepers']            = { Label = "Beekeepers Handcrafts & Honey Products" },
     ['collectors_watches']    = { Label = "Watches" },
     ['collectors_fireworks']  = { Label = "Fireworks & Firecrackers" },
-
-    ['vets']        = { Label = "Doggie Products" },
-
-    -- Fisherman
-    ['baits']       = { Label = "Bait Recipes" },
-    ['lures']       = { Label = "Lure Recipes" },
-    ['lines']       = { Label = "Line Recipes" },
-    ['reels']       = { Label = "Reel Recipes" },
-    ['hooks']       = { Label = "Hook Recipes" },
+    ['vets']                  = { Label = "Doggie Products" },
 }
 
 -----------------------------------------------------------
@@ -187,7 +161,8 @@ Config.Categories = {
 Config.CraftingRecipes = {
 
     -- Default Food Recipes
-    ['consumable_meat_cooked'] = {
+    {
+        Item              = 'consumable_meat_cooked',
         Category          = 'food', -- The category of the following recipe, where should it be added and displayed.
 
         -- If the following recipe requires a blueprint, it will be unlocked only when reading a blueprint.
@@ -219,7 +194,7 @@ Config.CraftingRecipes = {
        
         Duration          = 10,     -- The time is seconds (Crafting Duration).
 
-        Ingredients       = { ['meat'] = 1 }, -- The required ingredients for crafting the following recipe.
+        Ingredients       = { { item = 'meat', required_quantity = 1 } }, -- The required ingredients for crafting the following recipe.
     
         -- The information about the crafting recipe.
         -- Use \n for new lines.
@@ -234,7 +209,8 @@ Config.CraftingRecipes = {
         BackgroundImage   = false,
     },
 
-    ['consumable_biggame_cooked'] = {
+    {
+        Item              = 'consumable_biggame_cooked',
         Category          = 'food', 
 
         RequiredBlueprint = false,
@@ -250,7 +226,7 @@ Config.CraftingRecipes = {
 
         Duration          = 12, 
 
-        Ingredients       = { ['biggame'] = 1 },
+        Ingredients       = { { item = 'biggame', required_quantity = 1 } },
     
         RecipeInformation = "Cooked biggame's meat is a versatile and delicious ingredient that can be used in a variety of dishes, from savory sandwiches to hearty stews. However, proper storage and preservation are crucial to maintaining its quality, taste, and safety.",
 
@@ -260,7 +236,8 @@ Config.CraftingRecipes = {
         BackgroundImage   = false,
     },
 
-    ['consumable_bison_cooked'] = {
+    {
+        Item              = 'consumable_bison_cooked',
         Category          = 'food', 
 
         RequiredBlueprint = false, 
@@ -276,7 +253,7 @@ Config.CraftingRecipes = {
 
         Duration          = 12, 
 
-        Ingredients       = { ['bison_meat'] = 1 },
+        Ingredients       = { { item = 'bison_meat', required_quantity = 1 } } ,
     
         RecipeInformation = "Cooked bison's meat is a versatile and delicious ingredient that can be used in a variety of dishes, from savory sandwiches to hearty stews. However, proper storage and preservation are crucial to maintaining its quality, taste, and safety.",
 
@@ -290,7 +267,8 @@ Config.CraftingRecipes = {
     -- Crafts                          --
     -------------------------------------
 
-    ['campfire'] = {
+    {
+        Item              = 'campfire',
         Category          = 'crafts', 
 
         RequiredBlueprint = false, 
@@ -306,7 +284,10 @@ Config.CraftingRecipes = {
 
         Duration          = 15, 
 
-        Ingredients       = { ['rock'] = 6, ['wooden_sticks'] = 6},
+        Ingredients       = { 
+            { item = 'rock', required_quantity = 6 },
+            { item = 'wooden_sticks', required_quantity = 6 },
+        },
     
         RecipeInformation = "A campfire is a fire at a campsite that provides light and warmth, and heat for cooking. It can also serve as a beacon, and an insect and predator deterrent. Established campgrounds often provide a stone or steel fire ring for safety.",
 
@@ -316,7 +297,8 @@ Config.CraftingRecipes = {
         BackgroundImage   = false,
     },
 
-    ['tent'] = {
+    {
+        Item              = 'tent',
         Category          = 'crafts', 
 
         RequiredBlueprint = 'blueprint_tent',
@@ -332,8 +314,14 @@ Config.CraftingRecipes = {
 
         Duration          = 30, 
 
-        Ingredients       = { ['wooden_sticks'] = 10, ['wooden_planks'] = 20, ['fabric'] = 10, ['leather'] = 10, ['fibers'] = 6 },
-    
+        Ingredients       = { 
+            { item = 'wooden_sticks', required_quantity = 10 },
+            { item = 'wooden_planks', required_quantity = 20 },
+            { item = 'fabric',        required_quantity = 10 },
+            { item = 'leather',       required_quantity = 10 },
+            { item = 'fibers',        required_quantity = 6 },
+        },
+
         RecipeInformation = "A Tent is temporary accommodation which can be easily dismantled and which is portable. A tent is a movable, lightweight shelter which uses fabric to protect people from wind, rain and from the cold.\nIt also provides a private and comfortable place to sleep and store your gear. Without a tent, you would be exposed to the elements, insects, and wildlife.",
 
         ActionDisplay     = "Press here to start crafting.",
@@ -343,435 +331,44 @@ Config.CraftingRecipes = {
     },
     
     -------------------------------------
-    -- Vet                             --
-    -------------------------------------
-
-    ['mydog_snacks'] = {
-        Category          = 'vets',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 4,
-
-        Duration          = 15,
-
-        Ingredients       = { ['minced_meat'] = 1, ['wild_carrot'] = 1, ['corn'] = 1 },
-
-        RecipeInformation = "A doggie snacks meal is used for training purposes, only a doggie snack, so delicious for them can make them to focus and be trained well under any circumstances.",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing doggie snacks..",
-
-        BackgroundImage   = false,
-    },
-
-    
-    ['vetsyringe'] = {
-        Category          = 'vets',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 4,
-
-        Duration          = 10,
-
-        Ingredients       = { },
-
-        RecipeInformation = "A vet dog syringe is used when a dog is unconscious, its increasing the dogs heart pulse.",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing a dog syringe..",
-
-        BackgroundImage   = false,
-    },
-
-    -------------------------------------
-    -- Blacksmith                      --
-    -------------------------------------
-
-    ['shellcasing'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 10,
-
-        Duration          = 10,
-
-        Ingredients       = { ['copper'] = 10 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing empty shell casing..",
-
-        BackgroundImage   = false,
-    },
- 
-    ['nails'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 10,
-
-        Duration          = 10,
-
-        Ingredients       = { ['iron'] = 10  },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing nails..",
-
-        BackgroundImage   = false,
-    },
-            
-    ['wrench'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 5,
-
-        Ingredients       = { ['metal'] = 1 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing wrench..",
-
-        BackgroundImage   = false,
-    },
-
-    ['ironhorseshoe'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 5,
-
-        Ingredients       = { ['silver'] = 1, ['copper'] = 1 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing iron horse shoes..",
-
-        BackgroundImage   = false,
-    },
-
-    ['silverhorseshoe'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 10,
-
-        Ingredients       = { ['silver'] = 1, ['copper'] = 2 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing silver horse shoes..",
-
-        BackgroundImage   = false,
-    },
-
-    ['goldhorseshoe'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 15,
-
-        Ingredients       = { ['goldfragment'] = 1, ['silver'] = 1, ['copper'] = 2 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing golden horse shoes..",
-
-        BackgroundImage   = false,
-    },
-
-    
-    ['steel'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 10,
-
-        Ingredients       = { ['iron'] = 2 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing steel..",
-
-        BackgroundImage   = false,
-    },
-
-    
-    ['metal'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 10,
-
-        Ingredients       = { ['iron'] = 2 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing metal..",
-
-        BackgroundImage   = false,
-    },
-
-    ['ironbar'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 15,
-
-        Ingredients       = { ['iron'] = 10 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing iron bar..",
-
-        BackgroundImage   = false,
-    },
-
-    
-    ['goldbar'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 25,
-
-        Ingredients       = { ['goldnugget'] = 20 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing gold bar..",
-
-        BackgroundImage   = false,
-    },
-
-    ['goldnugget'] = {
-        Category          = 'blacksmith',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 20,
-
-        Duration          = 25,
-
-        Ingredients       = { ['goldbar'] = 1 },
-
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing gold nuggets..",
-
-        BackgroundImage   = false,
-    },
-
-    -------------------------------------
-    -- Beekeepers                      --
-    -------------------------------------
-
-    ['empty_jar'] = {
-        Category          = 'beekeepers',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 5,
-
-        Ingredients       = { ['emptybottle'] = 1, ['fibers'] = 1, ['fabric'] = 1 },
-
-        RecipeInformation = "An empty bee jar is used for collecting any kind of bees or hornets and storing them properly for the beehives.",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing an empty bee jar..",
-
-        BackgroundImage   = false,
-    },
-
-    
-    ['insect_medicine'] = {
-        Category          = 'beekeepers',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 1,
-
-        Duration          = 10,
-
-        Ingredients       = { ['canteenempty'] = 1, ['sugar'] = 1, ['Alaskan_Ginseng'] = 1 },
-
-        RecipeInformation = "Insects Medicine, a required medicine to be used on beehives for protecting your bees or hornets from any kind of insects, by not using it, your beehives will be completely destroyed after an amount of time.",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing a medicine for insects..",
-
-        BackgroundImage   = false,
-    },
-
-    ['small_honey_jar'] = {
-        Category          = 'beekeepers',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 5,
-
-        Duration          = 30,
-
-        Ingredients       = { ['emptybottle'] = 5, ['honey'] = 1 },
-
-        RecipeInformation = "A small honey jar is a jar (with low weight) that has been filled with collected honey from the bees or beehives.",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing a small honey jar..",
-
-        BackgroundImage   = false,
-    },
-
-    ['consumable_tootsie_roll'] = {
-        Category          = 'beekeepers',
-
-        RequiredBlueprint = false,
-
-        IsWeapon          = false,
-        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
-        Metadata          = false,
-
-        IsCookable        = false,
-
-        Quantity          = 5,
-
-        Duration          = 30,
-
-        Ingredients       = { ['butter'] = 1, ['small_honey_jar'] = 1, ['cocoa'] = 1 },
-
-        RecipeInformation = "Tootsie Roll (/ˈtʊtsi/) is a chocolate-flavored candy (we are using honey as replacement) that has been manufactured in the United States since 1907. The candy has qualities similar to both caramels and taffy without being exactly either confection. The manufacturer, Tootsie Roll Industries, is based in Chicago, Illinois.",
-        ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing honey totsie rolls..",
-
-        BackgroundImage   = false,
-    },
-
-    -------------------------------------
     -- Gunsmith                        --
     -------------------------------------
 
-    ['weapon_screws'] = {
+    {
+        Item              = 'WEAPON_RIFLE_BOLTACTION', -- the weapon to be repaired.
+        Label             = "Bolt Action Rifle", -- IN CASE IS A WEAPON, IT REQUIRES A LABEL
+
+        Category          = 'gunsmith_repairs',
+
+        RequiredBlueprint = false,
+
+        IsWeapon          = true,
+        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
+        Metadata          = false,
+
+        IsCookable        = false,
+
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = true, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
+
+        Quantity          = 1,
+
+        Duration          = 60,
+
+        Ingredients       = { 
+            { item = 'weapon_screws',  required_quantity = 10 }, 
+            { item = 'oilbottle',      required_quantity = 5  }, 
+        },
+
+        RecipeInformation = "",
+        ActionDisplay     = "Press here to start the repair.",
+        ProgressDisplay   = "Repairing weapon..",
+
+        BackgroundImage   = false,
+    },
+
+    {
+        Item              = 'weapon_screws',
         Category          = 'gunsmith_parts',
 
         RequiredBlueprint = false,
@@ -786,16 +383,19 @@ Config.CraftingRecipes = {
 
         Duration          = 10,
 
-        Ingredients       = { ['copper'] = 10 },
+        Ingredients       = { 
+            { item = 'copper',          required_quantity = 10 },
+        },
 
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
+        RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing weapon screws..",
 
         BackgroundImage   = false,
     },
 
-    ['weapon_spring'] = {
+    {
+        Item              = 'weapon_spring',
         Category          = 'gunsmith_parts',
 
         RequiredBlueprint = false,
@@ -810,16 +410,20 @@ Config.CraftingRecipes = {
 
         Duration          = 5,
 
-        Ingredients       = { ['copper'] = 1, ['steel'] = 1 },
+        Ingredients       = { 
+            { item = 'copper', required_quantity = 1 },
+            { item = 'steel',  required_quantity = 1 },
+        },
 
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
+        RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing weapon spring..",
 
         BackgroundImage   = false,
     },
 
-    ['weapon_trigger'] = {
+    {
+        Item              = 'weapon_trigger',
         Category          = 'gunsmith_parts',
 
         RequiredBlueprint = false,
@@ -834,16 +438,20 @@ Config.CraftingRecipes = {
 
         Duration          = 5,
 
-        Ingredients       = { ['copper'] = 1, ['steel'] = 1 },
+        Ingredients       = { 
+            { item = 'copper', required_quantity = 1 },
+            { item = 'steel',  required_quantity = 1 },
+        },
 
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
+        RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing weapon screws..",
 
         BackgroundImage   = false,
     },
 
-    ['weapon_trigger'] = {
+    {
+        Item              = 'weapon_cylinder',
         Category          = 'gunsmith_parts',
 
         RequiredBlueprint = false,
@@ -858,21 +466,78 @@ Config.CraftingRecipes = {
 
         Duration          = 5,
 
-        Ingredients       = { ['copper'] = 1, ['steel'] = 1 },
+        Ingredients       = { 
+            { item = 'steel', required_quantity = 5 },
+        },
 
-        RecipeInformation = "A breakfast lover's dream! These honey pancakes are light and fluffy with a subtly sweet flavor from the honey. They're easy to make and freezer-friendly!",
+        RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
-        ProgressDisplay   = "Preparing weapon screws..",
+        ProgressDisplay   = "Preparing weapon cylinder..",
 
         BackgroundImage   = false,
     },
 
+    {
+        Item              = 'weapon_barrel',
+        Category          = 'gunsmith_parts',
+
+        RequiredBlueprint = false,
+
+        IsWeapon          = false,
+        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
+        Metadata          = false,
+
+        IsCookable        = false,
+
+        Quantity          = 1,
+
+        Duration          = 5,
+
+        Ingredients       = { 
+            { item = 'steel', required_quantity = 10 },
+        },
+
+        RecipeInformation = "",
+        ActionDisplay     = "Press here to start crafting.",
+        ProgressDisplay   = "Preparing weapon cylinder..",
+
+        BackgroundImage   = false,
+    },
+
+    {
+        Item              = 'weapon_stock',
+        Category          = 'gunsmith_parts',
+
+        RequiredBlueprint = false,
+
+        IsWeapon          = false,
+        SerialNumberStart = '', -- Leave it blank if you don't want the serial numbers to have a start letters (such as: val_gunsmith)
+        Metadata          = false,
+
+        IsCookable        = false,
+
+        Quantity          = 1,
+
+        Duration          = 5,
+
+        Ingredients       = { 
+            { item = 'wooden_planks', required_quantity = 2 },
+            { item = 'metal',         required_quantity = 5 },
+        },
+
+        RecipeInformation = "",
+        ActionDisplay     = "Press here to start crafting.",
+        ProgressDisplay   = "Preparing a weapon stock..",
+
+        BackgroundImage   = false,
+    },
 
     -------------------------------------
     -- Saloon Food Recipes             --
     -------------------------------------
 
-    ['consumable_vegstew'] = {
+    {
+        Item              = 'consumable_vegstew',
         Category          = 'food_saloon',
 
         RequiredBlueprint = false,
@@ -887,14 +552,21 @@ Config.CraftingRecipes = {
 
         Duration          = 25,
 
-        Ingredients       = { ['bowl'] = 1, ['potato'] = 1, ['wild_carrot'] = 1, ['crows_garlic'] = 1, ['parasol_mushroom'] = 1, ['salt'] = 1},
+        Ingredients       = { 
+            { item = 'bowl',             required_quantity = 1 },
+            { item = 'potato',           required_quantity = 1 },
+            { item = 'wild_carrot',      required_quantity = 1 },
+            { item = 'crows_garlic',     required_quantity = 1 },
+            { item = 'parasol_mushroom', required_quantity = 1 },
+            { item = 'salt',             required_quantity = 1 },
+        },
 
         RecipeInformation = "Vegetable stew is a hearty and comforting recipe made with a variety of vegetables cooked in a flavorful broth! It is a healthy and versatile meal. Great for the colder weather, family dinners, meal prep, and leftovers!",
         ActionDisplay     = "Press here to start cooking.",
         ProgressDisplay   = "Preparing veggie stew..",
 
-        BackgroundImage   = false, -- "english_breakfast.jpg"
-    },
+        BackgroundImage   = false,
+    }, 
 
 
 }
@@ -908,25 +580,11 @@ Config.Locations = {
 
         [1] = { -- Smith Fields Saloon (Valentine)
 
-        -- Supports exp_target_menu (Made by Milyon James)
-        -- Set to true only if you are using this script and most important
-        -- ONLY if the crafting / cooking location has an object / prop to support it.
-        -- (CraftingProp always supports exp_target_menu if enabled and spawned custom prop)
-        TargetMenu = {
-            Enabled = false,
-
-            -- What prop should the system search close to the ActionDistance?
-            -- If the prop won't have any target menu action, increase the ActionDistance.
-            -- The following system will be checking for the existing object ONLY if 
-            -- CraftingProp.Enabled == false.
-            Object = 'p_furnace01x',
-        },
-
         Jobs = {'valsaloon'}, -- (!) SET to false if you don't want any jobs to be required for opening the following crafting location.
 
         Coords = { x = -308.6759338378906, y = 804.716552734375, z = 118.98242950439453, h = 197.177 },
 
-        ActionDistance = 1.1, -- The distance to open the crafting book or target an object (if exp_target_menu is enabled).
+        ActionDistance = 1.1, -- The distance to open the crafting book.
         PromptActionDisplay = 'Checkout Cooking Recipes',
         PromptFooterDisplay = 'Smith Fields Saloon',
 
@@ -959,11 +617,6 @@ Config.Locations = {
 
     [2] = {
 
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_furnace01x',
-        },
-
         Jobs = {'keanessaloon'}, 
 
         Coords = { x = -238.69558715820312, y = 766.9777221679688, z = 118.06407928466797, h = 207.45 },
@@ -992,11 +645,6 @@ Config.Locations = {
     },
 
     [3] = {
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_furnace01x',
-        },
 
         Jobs = {'rhsaloon'}, 
 
@@ -1027,11 +675,6 @@ Config.Locations = {
 
     [4] = {
 
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_furnace01x',
-        },
-
         Jobs = {'stsaloon'}, 
 
         Coords = { x = 2637.86865234375, y = -1220.630126953125, z = 53.39260482788086, h = 9.0273380279541 },
@@ -1060,11 +703,6 @@ Config.Locations = {
     },
 
     [5] = {
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_furnace01x',
-        },
 
         Jobs = {'vanhornsaloon'}, 
 
@@ -1095,11 +733,6 @@ Config.Locations = {
 
     [6] = {
 
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_furnace01x',
-        },
-
         Jobs = {'bwsaloon'}, 
 
         Coords = { x = -822.6748046875, y = -1321.460693359375, z = 43.69108581542969, h = 5.048969745636 },
@@ -1126,225 +759,8 @@ Config.Locations = {
         AnimationType = "FURNACE", -- false
         Categories = { 'food_saloon' },
     },
-
-    -- BLACKSMITHS
-
-    [7] = {
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_workbench01x',
-        },
-
-        Jobs = {'sdblacksmith'}, 
-
-        Coords = { x = 2692.067, y = -822.679, z = 42.293, h = 114.07 },
-
-        ActionDistance = 1.1,
-        PromptActionDisplay = 'Checkout Handcrafts',
-        PromptFooterDisplay = 'Saint Denis Blacksmith',
-
-        DrawText = 'Blacksmith Handcrafts',
-        DrawTextRenderDistance = 4,
-
-        Header       = "Blacksmith Crafting Guide", 
-        Description  = "Welcome to our Blacksmith Crafting Guide, below, all our crafting recipes will be displayed to assist you so you can receive some experience and provide the best quality of crafts for our customers based on their preferences and their needs.",
-        
-        CraftingProp = {
-            Enabled = false,
-
-            Coords = {  },
-            
-            Prop    = 'p_workbench01x',
-            RenderDistance = 15,
-        },
-
-        AnimationType = false, -- false
-        Categories = { 'blacksmith' },
-    },
-
-    [8] = {
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_workbench01x',
-        },
-
-        Jobs = {'blacksmith'}, 
-
-        Coords = { x = -369.381, y = 796.3142, z = 116.19, h = 99.56 },
-
-        ActionDistance = 1.1,
-        PromptActionDisplay = 'Checkout Handcrafts',
-        PromptFooterDisplay = 'Valentine Blacksmith',
-
-        DrawText = 'Blacksmith Handcrafts',
-        DrawTextRenderDistance = 4,
-
-        Header       = "Blacksmith Crafting Guide", 
-        Description  = "Welcome to our Blacksmith Crafting Guide, below, all our crafting recipes will be displayed to assist you so you can receive some experience and provide the best quality of crafts for our customers based on their preferences and their needs.",
-        
-        CraftingProp = {
-            Enabled = false,
-
-            Coords = {  },
-            
-            Prop    = 'p_workbench01x',
-            RenderDistance = 15,
-        },
-
-        AnimationType = false, -- false
-        Categories = { 'blacksmith' },
-    },
-
-    
-    [9] = {
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_workbench01x',
-        },
-
-        Jobs = {'strblacksmith'}, 
-
-        Coords = { x = -1820.27, y = -568.013, z = 156.00, h = 41.40 },
-
-        ActionDistance = 1.1,
-        PromptActionDisplay = 'Checkout Handcrafts',
-        PromptFooterDisplay = 'Strawberry Blacksmith',
-
-        DrawText = 'Blacksmith Handcrafts',
-        DrawTextRenderDistance = 4,
-
-        Header       = "Blacksmith Crafting Guide", 
-        Description  = "Welcome to our Blacksmith Crafting Guide, below, all our crafting recipes will be displayed to assist you so you can receive some experience and provide the best quality of crafts for our customers based on their preferences and their needs.",
-        
-        CraftingProp = {
-            Enabled = false,
-
-            Coords = {  },
-            
-            Prop    = 'p_workbench01x',
-            RenderDistance = 15,
-        },
-
-        AnimationType = false, -- false
-        Categories = { 'blacksmith' },
-    },
-
-    [10] = {
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_workbench01x',
-        },
-
-        Jobs = {'bwblacksmith'}, 
-
-        Coords = { x = -870.213, y = -1389.13, z = 43.525, h = 355.85168457031 },
-
-        ActionDistance = 1.1,
-        PromptActionDisplay = 'Checkout Handcrafts',
-        PromptFooterDisplay = 'Blackwater Blacksmith',
-
-        DrawText = 'Blacksmith Handcrafts',
-        DrawTextRenderDistance = 4,
-
-        Header       = "Blacksmith Crafting Guide", 
-        Description  = "Welcome to our Blacksmith Crafting Guide, below, all our crafting recipes will be displayed to assist you so you can receive some experience and provide the best quality of crafts for our customers based on their preferences and their needs.",
-        
-        CraftingProp = {
-            Enabled = false,
-
-            Coords = {  },
-            
-            Prop    = 'p_workbench01x',
-            RenderDistance = 15,
-        },
-
-        AnimationType = false, -- false
-        Categories = { 'blacksmith' },
-    },
-
-    -- Beekeepers
-
-    [11] = {
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_workbench01x',
-        },
-
-        Jobs = {'beekeeper'}, 
-
-        Coords = { x = -1553.22, y = 249.5491, z = 114.81, h = 206.38107299805 },
-
-        ActionDistance = 1.1,
-        PromptActionDisplay = 'Checkout Products & Handcrafts',
-        PromptFooterDisplay = 'Strawberry Beekeeper',
-
-        DrawText = 'Strawberry Beekeeper',
-        DrawTextRenderDistance = 4,
-
-        Header       = "Beekeepers Crafting & Products Guide", 
-        Description  = "Welcome to the Beekeepers Handcrafts & Products Guide, below, all our crafting recipes will be displayed to assist you so you can receive some experience and provide the best quality of crafts for our customers based on their preferences and their needs.",
-        
-        CraftingProp = {
-            Enabled = false,
-
-            Coords = {  },
-            
-            Prop    = 'p_workbench01x',
-            RenderDistance = 15,
-        },
-
-        AnimationType = false, -- false
-        Categories = { 'beekeepers' },
-    },
-
-    -- vets
-
-    [12] = {
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_workbench01x',
-        },
-
-        Jobs = {'vet'}, 
-
-        Coords = { x = -1676.05, y = -340.846, z = 170.78, h = 232.70013427734 },
-
-        ActionDistance = 1.1,
-        PromptActionDisplay = 'Checkout Doggie Products',
-        PromptFooterDisplay = 'Vet',
-
-        DrawText = 'Vet',
-        DrawTextRenderDistance = 4,
-
-        Header       = "Vet Doggie Products Guide", 
-        Description  = "Welcome to the Vet Doggie Products Guide, below, all our crafting recipes will be displayed to assist you so you can receive some experience and provide the best quality of crafts for our customers based on their preferences and their needs.",
-        
-        CraftingProp = {
-            Enabled = false,
-
-            Coords = {  },
-            
-            Prop    = 'p_workbench01x',
-            RenderDistance = 15,
-        },
-
-        AnimationType = false, -- false
-        Categories = {'vets'},
-    },
     
     [13] = { -- Annesburg Saloon
-
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_furnace01x',
-        },
 
         Jobs = {'annessaloon'}, 
 
@@ -1375,12 +791,6 @@ Config.Locations = {
 
     [14] = { -- Emerald Saloon
 
-
-        TargetMenu = {
-            Enabled = false,
-            Object = 'p_furnace01x',
-        },
-
         Jobs = {'emeraldsaloon'}, 
 
         Coords = { x = 1448.466, y = 379.8521, z = 89.849, h = 9.961505 },
@@ -1404,8 +814,39 @@ Config.Locations = {
             RenderDistance = 15,
         },
 
-        AnimationType = 'WORLD_HUMAN_FIRE_TEND_KNEEL', -- false
+        AnimationType = 'CAMPFIRE', -- false
         Categories = { 'food_saloon' },
+    },
+
+    -- GUNSMITHS
+
+    [15] = { -- Valentine Gunsmith
+
+        Jobs = {'valgunsmith'}, 
+
+        Coords = { x = -276.2276611328125, y = 779.1404418945312, z = 119.53300476074219, h = 279.288 },
+    
+        ActionDistance = 1.2,
+        PromptActionDisplay = 'Checkout Handcrafts',
+        PromptFooterDisplay = 'Valentine Gunsmith',
+    
+        DrawText = 'Gunsmith Handcrafts',
+        DrawTextRenderDistance = 4,
+    
+        Header       = "Gunsmith Crafting Guide", 
+        Description  = "Welcome to our Gunsmith Crafting Guide, below, all our crafting recipes will be displayed to assist you so you can receive some experience and provide the best quality of crafts for our customers based on their preferences and their needs.",
+        
+        CraftingProp = {
+            Enabled = false,
+    
+            Coords = {  },
+            
+            Prop    = 'p_workbench01x',
+            RenderDistance = 15,
+        },
+    
+        AnimationType = 'TABLE', -- false
+        Categories = { 'gunsmith_repairs', 'gunsmith_parts' },
     },
 
 }

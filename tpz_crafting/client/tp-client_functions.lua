@@ -1,4 +1,7 @@
 
+local Prompts, PickupPrompts       = GetRandomIntInRange(0, 0xffffff), GetRandomIntInRange(0, 0xffffff)
+local PromptsList, PickupPromptsList   = nil, nil
+
 --[[-------------------------------------------------------
  Handlers
 ]]---------------------------------------------------------
@@ -8,16 +11,17 @@ AddEventHandler("onResourceStop", function(resourceName)
         return
     end
 
+    Citizen.InvokeNative(0x00EDE88D4D13CF59, Prompts) -- UiPromptDelete
+    Citizen.InvokeNative(0x00EDE88D4D13CF59, PromptsList) -- UiPromptDelete
+
     for _, v in pairs (Config.Locations) do
 
         if v.PropEntity then
 
+
             DeleteEntity(v.PropEntity)
             SetEntityAsNoLongerNeeded(v.PropEntity)
 
-            if Config.exp_target_menu then
-                TriggerEvent("exp_target_menu:RemoveEntityMenuItem", v.PropEntity, "tpz_crafting:OpenCraftingByLocationIndex")
-            end
         end
         
     end
@@ -29,9 +33,6 @@ end)
 --[[-------------------------------------------------------
  Prompts
 ]]---------------------------------------------------------
-
-Prompts       = GetRandomIntInRange(0, 0xffffff)
-PromptsList   = {}
 
 RegisterActionPrompt = function()
 
@@ -53,9 +54,9 @@ RegisterActionPrompt = function()
     PromptsList = dPrompt
 end
 
-
-PickupPrompts       = GetRandomIntInRange(0, 0xffffff)
-PickupPromptsList   = {}
+function GetPromptData()
+    return Prompts, PromptsList
+end
 
 RegisterPickupActionPrompt = function()
 
@@ -75,6 +76,10 @@ RegisterPickupActionPrompt = function()
     PromptRegisterEnd(dPrompt)
 
     PickupPromptsList = dPrompt
+end
+
+function GetPickupPromptData()
+    return PickupPrompts, PickupPromptsList
 end
 
 
@@ -97,30 +102,12 @@ SpawnEntityProp = function(index)
     FreezeEntityPosition(entity, true)
 
     Config.Locations[index].PropEntity = entity
-
-    if Config.exp_target_menu then
-
-        if Locales[propData.Prop] then
-            TriggerEvent("exp_target_menu:SetModelName", GetHashKey(propData.Prop), Locales[propData.Prop])
-        end
-
-        TriggerEvent("exp_target_menu:AddEntityMenuItem", entity, "tpz_crafting:OpenCraftingByLocationIndex", Config.Locations[index].PromptActionDisplay, false)
-   
-    end
 end
 
 
 --[[-------------------------------------------------------
  General
 ]]---------------------------------------------------------
-
--- @GetTableLength returns the length of a table.
-GetTableLength = function(T)
-    local count = 0
-    for _ in pairs(T) do count = count + 1 end
-    return count
-end
-
 
 LoadModel = function(model)
     local model = joaat(model)

@@ -115,28 +115,6 @@ AddEventHandler('tpz_crafting:client:onCraftingBookUse', function(item, itemId)
     OpenCraftingByItem(item, _itemId)
 end)
 
--- The following event is triggered by exp_target_menu which opens the closest crafting
--- When opening, the following event is also checking for job requirements.
-RegisterNetEvent('tpz_crafting:OpenCraftingByLocationIndex')
-AddEventHandler('tpz_crafting:OpenCraftingByLocationIndex', function()
-    local index = ClosestLocationIndex
-
-    -- If for some reason location index is null, we prevent from opening.
-    if Config.Locations[index] == nil then
-        return
-    end
-
-    local isCraftingAllowed = ContainsJob(Config.Locations[index])
-                
-    -- If is crafting not allowed because of job requirements, we also prevent from opening.
-    if not isCraftingAllowed then
-        return
-    end
-
-    OpenCraftingByLocationIndex(index)
-
-end)
-
 ---------------------------------------------------------------
 -- Threads
 ---------------------------------------------------------------
@@ -171,8 +149,7 @@ Citizen.CreateThread(function()
 
                 if Config.Locations[index].PropEntity and ( distance > propConfig.RenderDistance ) then
 
-                    DeleteEntity(Config.Locations[index].PropEntity)
-                    SetEntityAsNoLongerNeeded(Config.Locations[index].PropEntity)
+                    exports.tpz_core:getCoreAPI().RemoveEntityProperly(Config.Locations[index].PropEntity, GetHashKey(Config.Locations[index].CraftingProp.Prop))
 
                     Config.Locations[index].PropEntity = nil
                 end
@@ -180,20 +157,6 @@ Citizen.CreateThread(function()
                 if propConfig.Enabled and not Config.Locations[index].PropEntity and distance <= propConfig.RenderDistance then
                     SpawnEntityProp(index)
                 end
-
-
-                if Config.Locations[index].TargetEntity and ( distance > craftingConfig.ActionDistance ) then
-
-                    TriggerEvent("exp_target_menu:RemoveEntityMenuItem", Config.Locations[index].TargetEntity, "tpz_crafting:OpenCraftingByLocationIndex")
-
-                    Config.Locations[index].TargetEntity = nil
-                end
-
-                -- We are getting the index of the closest action for exp_target_menu.
-                if distance <= craftingConfig.ActionDistance then
-                    ClosestLocationIndex = index
-                end
-                
 
                 local isCraftingAllowed = ContainsJob(craftingConfig)
                 
@@ -206,41 +169,21 @@ Citizen.CreateThread(function()
     
                     if distance <= craftingConfig.ActionDistance then
 
-                        if not craftingConfig.TargetMenu.Enabled then
-                            sleep = false
+                        sleep = false
     
-                            local label = CreateVarString(10, 'LITERAL_STRING', craftingConfig.PromptFooterDisplay)
-                            local str   = CreateVarString(10, 'LITERAL_STRING', craftingConfig.PromptActionDisplay)
-                            
-                            PromptSetText(PromptsList, str)
-                            PromptSetActiveGroupThisFrame(Prompts, label)
-        
-                            if PromptHasHoldModeCompleted(PromptsList) then
-        
-                                OpenCraftingByLocationIndex(index)
+                        local label = CreateVarString(10, 'LITERAL_STRING', craftingConfig.PromptFooterDisplay)
+                        local str   = CreateVarString(10, 'LITERAL_STRING', craftingConfig.PromptActionDisplay)
+                        
+                        local Prompts, PromptsList = GetPromptData()
+
+                        PromptSetText(PromptsList, str)
+                        PromptSetActiveGroupThisFrame(Prompts, label)
     
-                                Wait(1000)
-                            end
-
-                        elseif craftingConfig.TargetMenu.Enabled and not propConfig.Enabled then
-
-                            if Config.Locations[index].TargetEntity == nil then
-                                local object   = craftingConfig.TargetMenu.Object
-                                local objectId = GetClosestObjectOfType(coords, craftingConfig.ActionDistance, joaat(object), false)
-                            
-                                if objectId ~= 0 then
+                        if PromptHasHoldModeCompleted(PromptsList) then
     
-                                    if Locales[object] then
-                                        TriggerEvent("exp_target_menu:SetModelName", GetHashKey(object), Locales[object])
-                                    end
-                            
-                                    TriggerEvent("exp_target_menu:AddEntityMenuItem", objectId, "tpz_crafting:OpenCraftingByLocationIndex", Config.Locations[index].PromptActionDisplay, false)
-                            
+                            OpenCraftingByLocationIndex(index)
 
-                                    Config.Locations[index].TargetEntity = objectId
-                                end
-
-                            end
+                            Wait(1000)
                         end
 
                     end

@@ -18,6 +18,20 @@ function GetCraftingLocations()
   return CraftingLocations
 end
 
+
+DoesRecipeExist = function(item)
+
+  for index, recipe in pairs (Config.CraftingRecipes) do
+
+    if item == recipe.Item then
+      return true, recipe
+    end
+
+  end
+
+  return false, nil
+
+end
 -----------------------------------------------------------
 --[[ Base Events  ]]--
 -----------------------------------------------------------
@@ -57,13 +71,42 @@ end)
 --[[ Events  ]]--
 -----------------------------------------------------------
 
+RegisterServerEvent("tpz_crafting:server:repairCrafting")
+AddEventHandler("tpz_crafting:server:repairCrafting", function(item, itemId)
+  local _source = source
+  local xPlayer = TPZ.GetPlayer(_source)
+
+  -- 100% devtools injection.
+  local DoesRecipeExist, RecipeData = DoesRecipeExist(item)
+  if not DoesRecipeExist or item == nil then
+
+    if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
+      local _w, _c      = Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Url, Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
+      local description = 'The specified user attempted to use devtools / injection cheat on stores for crafting - repairing products.'
+      TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, PlayerData.steamName, PlayerData.username, PlayerData.identifier, PlayerData.charIdentifier, description, _c)
+    end
+
+    --xPlayer.disconnect(Locales['DEVTOOLS_INJECTION_DETECTED'])
+    xPlayer.ban(Locales['DEVTOOLS_INJECTION_DETECTED'], -1)
+    return
+  end
+
+  if RecipeData.IsWeapon then
+    TPZInv.addWeaponDurability(_source, string.upper(item), 100, itemId)
+  else
+    TPZInv.addItemDurability(_source, item, 100, itemId)
+  end
+
+end)
+
 RegisterServerEvent("tpz_crafting:server:receiveCraftingRecipe")
 AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(item)
   local _source = source
   local xPlayer = TPZ.GetPlayer(_source)
 
   -- 100% devtools injection.
-  if Config.CraftingRecipes[item] == nil or item == nil then
+  local DoesRecipeExist, RecipeData = DoesRecipeExist(item)
+  if not DoesRecipeExist or item == nil then
 
     if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
       local _w, _c      = Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Url, Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
@@ -76,16 +119,15 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(item)
     return
   end
 
-  local RecipeData          = Config.CraftingRecipes[item]
   local requiredIngredients = RecipeData.Ingredients
   local contains            = true
 
   -- We are checking again for ingredients in case the player performed a devtools injection / not.
-  for item, quantity in pairs(requiredIngredients) do
+  for _, ingredient in pairs(requiredIngredients) do
 
-    local itemQuantity = xPlayer.getItemQuantity(item)
+    local itemQuantity = xPlayer.getItemQuantity(ingredient.item)
 
-    if itemQuantity == nil or itemQuantity == 0 or itemQuantity < quantity then
+    if itemQuantity == nil or itemQuantity == 0 or itemQuantity < ingredient.required_quantity then
       contains = false
     end
 
@@ -106,8 +148,8 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(item)
   end
 
   -- We are removing the crafting ingredients.
-  for item, quantity in pairs(requiredIngredients) do
-    xPlayer.removeItem(item, quantity)
+  for _, ingredient in pairs(requiredIngredients) do
+    xPlayer.removeItem(ingredient.item, ingredient.required_quantity)
   end
 
   -- We get the input metadata if available.

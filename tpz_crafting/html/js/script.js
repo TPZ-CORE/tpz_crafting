@@ -57,6 +57,10 @@ $(function() {
         $('#recipe-craft-button').text(prod_recipe.ActionDisplay);
       }
 
+      $("#recipe-unique-id-input").val(null);
+      
+      (prod_recipe.IsRepairable == null || !prod_recipe.IsRepairable) ? $("#recipe-unique-id-input").hide() : $("#recipe-unique-id-input").show();
+
       $("#recipe-image-background").hide();
       document.getElementById("recipe-image-background").style.backgroundImage = null;
 
@@ -210,7 +214,9 @@ $(function() {
 
     playAudio("button_click.wav");
 
-    $.post("http://tpz_crafting/craftSelectedRecipe", JSON.stringify({  }));
+    let $uniqueId = $("#recipe-unique-id-input").val();
+
+    $.post("http://tpz_crafting/craftSelectedRecipe", JSON.stringify({ uniqueId : $uniqueId  }));
 
   });
 

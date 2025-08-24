@@ -1,3 +1,4 @@
+local TPZ                     = exports.tpz_core:getCoreAPI()
 local TPZInv                  = exports.tpz_inventory:getInventoryAPI()
 
 local CraftingType            = nil
@@ -8,6 +9,24 @@ local CurrentCraftingBookItem = nil
 local CurrentItemId           = nil
 
 local UnlockedRecipes         = {}
+
+-----------------------------------------------------------
+--[[ Local Functions  ]]--
+-----------------------------------------------------------
+
+local DoesRecipeExist = function(item)
+
+    for index, recipe in pairs (Config.CraftingRecipes) do
+  
+      if item == recipe.item then
+        return true, recipe
+      end
+  
+    end
+  
+    return false, nil
+  
+end
 
 -----------------------------------------------------------
 --[[ Events  ]]--
@@ -31,7 +50,7 @@ local LoadCraftingLocationUnlockedRecipes = function(data)
     -- We are checking if required jobs != false (Crafting location can be public).
     if data.Jobs ~= false then
 
-        local length = GetTableLength(data.Jobs)
+        local length = TPZ.GetTableLength(data.Jobs)
 
         -- We are checking in case if required jobs != {} (Empty Table).
         if length > 0 then
@@ -132,7 +151,7 @@ OpenCrafting = function(data)
         crafting_det = {header = data.Header, description = data.Description},
     })
 
-    local categoryLength = GetTableLength(data.Categories)
+    local categoryLength = TPZ.GetTableLength(data.Categories)
 
     if categoryLength > 0 then
 
@@ -189,7 +208,7 @@ end
 -- @param category - Returns the selected category.
 RegisterNUICallback('requestCategoryRecipes', function(data)
     local PlayerData     = GetPlayerData()
-    local categoryLength = GetTableLength(Config.CraftingRecipes)
+    local categoryLength = TPZ.GetTableLength(Config.CraftingRecipes)
 
     if categoryLength <= 0 then
         return
@@ -197,22 +216,23 @@ RegisterNUICallback('requestCategoryRecipes', function(data)
 
     local elements = {}
 
-
     -- CurrentItemMetadata
 
     -- First we create a loop which will add as first elements, the recipes
     -- which are not locked (not requiring any blueprint)
     for _, recipe in pairs (Config.CraftingRecipes) do
 
-        if (recipe.Category == data.category) and (not recipe.RequiredBlueprint or recipe.RequiredBlueprint and UnlockedRecipes[_]) then
+        if (recipe.Category == data.category) and (not recipe.RequiredBlueprint or recipe.RequiredBlueprint and UnlockedRecipes[recipe.Item]) then
 
-            recipe.Label = "undefined"
+            if recipe.Label == nil then 
+                recipe.Label = "undefined"
+            end
             
-            if TPZInv.getItemData(_) then
-                recipe.Label = TPZInv.getItemData(_).label
+            if recipe.Label == "undefined" then
+                recipe.Label = TPZInv.getItemData(recipe.Item).label
             end
 
-            recipe.item = _
+            recipe.item = recipe.Item
             recipe.locked = false
             table.insert(elements, recipe)
         end
@@ -223,15 +243,17 @@ RegisterNUICallback('requestCategoryRecipes', function(data)
     -- which are locked (Having blueprint and are not unlocked)
     for _, recipe in pairs (Config.CraftingRecipes) do
 
-        if recipe.Category == data.category and recipe.RequiredBlueprint and UnlockedRecipes[_] == nil then
+        if recipe.Category == data.category and recipe.RequiredBlueprint and UnlockedRecipes[recipe.Item] == nil then
 
-            recipe.Label = "undefined"
+            if recipe.Label == nil then 
+                recipe.Label = "undefined"
+            end
             
-            if TPZInv.getItemData(_) then
-                recipe.Label = TPZInv.getItemData(_).label
+            if recipe.Label == "undefined" then
+                recipe.Label = TPZInv.getItemData(recipe.Item).label
             end
 
-            recipe.item = _
+            recipe.item = recipe.Item
             recipe.locked = true
             table.insert(elements, recipe)
 
@@ -242,7 +264,7 @@ RegisterNUICallback('requestCategoryRecipes', function(data)
     -- At last, we load all recipes based on their index ORDER for displaying
     -- all recipes properly (locked / not).
     for _, recipe in pairs (elements) do
-        SendNUIMessage({ action = 'loadCategoryRecipe', recipe = recipe.item, label = recipe.Label, locked = recipe.locked })
+        SendNUIMessage({ action = 'loadCategoryRecipe', recipe = recipe.Item, label = recipe.Label, locked = recipe.locked })
     end
 
 end)
@@ -251,18 +273,14 @@ end)
 RegisterNUICallback('requestRecipe', function(data)
     local PlayerData = GetPlayerData()
 
-    if not TPZInv.getItemData(data.recipe) then
-        return
+    local doesRecipeExist, recipe = DoesRecipeExist(data.recipe)
+
+    if recipe.Label == nil then 
+        recipe.Label = "undefined"
     end
 
-    Wait(500)
-
-    local recipe = Config.CraftingRecipes[data.recipe]
-
-    recipe.Label = "undefined"
-            
     -- If has an existing item, we load the item label.
-    if TPZInv.getItemData(data.recipe) then
+    if recipe.Label == "undefined" then
         recipe.Label = TPZInv.getItemData(data.recipe).label
     end
 
@@ -286,11 +304,11 @@ RegisterNUICallback('requestRecipe', function(data)
 
         local label = "undefined"
 
-        if TPZInv.getItemData(_) then
-            label = TPZInv.getItemData(_).label
+        if TPZInv.getItemData(ingredient.item) then
+            label = TPZInv.getItemData(ingredient.item).label
         end
 
-        SendNUIMessage({ action = 'loadSelectedRecipeIngredients', label = label, quantity = ingredient })
+        SendNUIMessage({ action = 'loadSelectedRecipeIngredients', label = label, quantity = ingredient.required_quantity })
 
     end
 
@@ -304,6 +322,8 @@ RegisterNUICallback('readSelectedRecipeBlueprint', function()
     local playerPed  = PlayerPedId()
 
     PlayerData.HasCooldown = true
+
+    local doesRecipeExist, recipe = DoesRecipeExist(item)
 
     TriggerEvent("tpz_core:ExecuteServerCallBack", "tpz_crafting:startReadingRecipe", function(cb)
 
@@ -339,20 +359,20 @@ RegisterNUICallback('readSelectedRecipeBlueprint', function()
         local NotifyData = Locales['BLUEPRINT_READ_ACHIEVEMENT']
         TriggerEvent("tpz_notify:sendNotification", NotifyData.title, NotifyData.message, NotifyData.icon, "info", NotifyData.duration)
 
-    end, { blueprint = Config.CraftingRecipes[item].RequiredBlueprint })
+    end, { blueprint = recipe.RequiredBlueprint })
 
 end)
 
 
-RegisterNUICallback('craftSelectedRecipe', function()
+-- @data.uniqueId : returns unique item or weapon id for repairs.
+RegisterNUICallback('craftSelectedRecipe', function(data)
     local PlayerData = GetPlayerData()
     local item       = SelectedRecipeItem
     local type       = CraftingType
     local index      = CraftingLocationIndex
 
     local playerPed  = PlayerPedId()
-
-    local recipe     = Config.CraftingRecipes[item]
+    local doesRecipeExist, recipe = DoesRecipeExist(item)
 
     -- For locations, we don't have to check for nearby objects, in that way,
     -- we do the crafting instantly if the player has the required weight or ingredients.
@@ -362,7 +382,6 @@ RegisterNUICallback('craftSelectedRecipe', function()
 
             -- If the player does not have enough weight or not ingredients, we cancel the crafting.
             if not cb then
-                TriggerEvent("tpz_crafting:SendNotification", Locales['NOT_ENOUGH_INGREDIENTS'], 'error')
                 SendNUIMessage({ action = 'resetCooldown' })
                 PlayerData.HasCooldown = false
                 return
@@ -377,26 +396,34 @@ RegisterNUICallback('craftSelectedRecipe', function()
     
             local locationData = Config.Locations[index]
         
-            if locationData.Animations then
+            if locationData.AnimationType ~= false then
     
                 SetEntityHeading(playerPed, locationData.Coords.h)
 
-                PerformCraftingAction(playerPed, locationData.Animations, recipe)
+                PerformCraftingAction(playerPed, locationData.AnimationType, recipe)
     
-                TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
+                if not recipe.IsRepairable then
+                    TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
+                else
+                    TriggerServerEvent("tpz_crafting:server:repairCrafting", item, data.uniqueId)
+                end
            
             else
-                FreezeEntityPosition(playerPed, true)
+                TaskStandStill(playerPed, -1)
                 exports.tpz_core:getCoreAPI().DisplayProgressBar(recipe.Duration * 1000, recipe.ProgressDisplay)
 
                 PlayerData.HasCooldown = false
-                FreezeEntityPosition(playerPed, false)
+                TaskStandStill(playerPed, 1)
 
-                TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
+                if not recipe.IsRepairable then
+                    TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
+                else
+                    TriggerServerEvent("tpz_crafting:server:repairCrafting", item, data.uniqueId)
+                end
             end
                 
         
-        end, { item = item } )
+        end, { item = item, uniqueId = data.uniqueId } )
 
     elseif type == "ITEM" then
 
@@ -436,7 +463,6 @@ RegisterNUICallback('craftSelectedRecipe', function()
 
                 -- If the player does not have enough weight or not ingredients, we cancel the crafting.
                 if not cb then
-                    TriggerEvent("tpz_crafting:SendNotification", Locales['NOT_ENOUGH_INGREDIENTS'], 'error')
                     SendNUIMessage({ action = 'resetCooldown' })
                     PlayerData.HasCooldown = false
                     return
@@ -466,9 +492,12 @@ RegisterNUICallback('craftSelectedRecipe', function()
 
                 if not recipe.IsBuildable then
                     TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
+                    
+                elseif recipe.IsRepairable then
+                    TriggerServerEvent("tpz_crafting:server:repairCrafting", item, data.uniqueId)
                 end
 
-            end, { item = item } )
+            end, { item = item, uniqueId = data.uniqueId } )
 
         end
 

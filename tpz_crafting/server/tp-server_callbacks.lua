@@ -7,17 +7,17 @@ local TPZInv = exports.tpz_inventory:getInventoryAPI()
 
 exports.tpz_core:getCoreAPI().addNewCallBack("tpz_crafting:canCraftRecipe", function(source, cb, data)
   local _source      = source
-  local recipe       = Config.CraftingRecipes[data.item]
+  local DoesRecipeExist, recipe = DoesRecipeExist(data.item)
 
   -- If for some reason the recipe does not exist, we return false.
-  if recipe == nil then
+  if not DoesRecipeExist or recipe == nil then
     print("Error: " .. data.item .. " does not seem to exist for crafting this recipe.")
     return cb(false)
   end
 
   local canCarry = true
   
-  if not recipe.IsBuildable then
+  if not recipe.IsBuildable and not recipe.IsRepairable then
     
     canCarry = TPZInv.canCarryItem(_source, data.item, recipe.Quantity)
 
@@ -44,21 +44,53 @@ exports.tpz_core:getCoreAPI().addNewCallBack("tpz_crafting:canCraftRecipe", func
   local requiredIngredients = recipe.Ingredients
   local contains            = true
 
-  for item, quantity in pairs(requiredIngredients) do
+  for _, ingredient in pairs(requiredIngredients) do
 
-    local itemQuantity = TPZInv.getItemQuantity(_source, item)
+    local itemQuantity = TPZInv.getItemQuantity(_source, ingredient.item)
 
-    if itemQuantity == nil or itemQuantity == 0 or itemQuantity < quantity then
+    if itemQuantity == nil or itemQuantity == 0 or itemQuantity < ingredient.required_quantity then
       contains = false
     end
 
   end
 
-  for item, quantity in pairs(requiredIngredients) do
-    TPZInv.removeItem(_source, item, quantity)
+  local hasRequiredItemId = true
+
+  if contains and recipe.IsRepairable then
+
+    if data.uniqueId == nil then
+      data.unique = 'unknown-xxxxx'
+    end
+
+    if recipe.IsWeapon then
+      hasRequiredItemId = TPZInv.doesPlayerHaveWeapon(_source, data.item, data.uniqueId)
+    else
+      hasRequiredItemId = TPZInv.doesPlayerHaveItemId(_source, data.item, data.uniqueId)
+    end
+
+    Wait(250)
+
+    if not hasRequiredItemId then
+      contains = false
+
+      TriggerClientEvent("tpz_crafting:SendNotification", _source, Locales['TARGET_ID_DOES_NOT_EXIST'], 'error')
+    end
+
   end
 
-  cb(contains)
+  if contains then
+
+    for _, ingredient in pairs(requiredIngredients) do
+      TPZInv.removeItem(_source, ingredient.item, ingredient.required_quantity)
+    end
+
+  end
+
+  if (not contains and hasRequiredItemId) or (not contains and not hasRequiredItemId) then
+    TriggerClientEvent("tpz_crafting:SendNotification", _source, Locales['NOT_ENOUGH_INGREDIENTS'], 'error')
+  end
+
+  return cb(contains)
 
 end)
 
@@ -129,12 +161,12 @@ exports.tpz_core:getCoreAPI().addNewCallBack("tpz_crafting:startPlacedObjectPick
 
   local totalWeight = 0
 
-  for item, quantity in pairs(requiredIngredients) do
+  for _, ingredient in pairs(requiredIngredients) do
 
-    local itemWeight = TPZInv.getItemWeight(item)
-    totalWeight      = totalWeight + (itemWeight * quantity)
+    local itemWeight = TPZInv.getItemWeight(ingredient.item)
+    totalWeight      = totalWeight + (itemWeight * ingredient.required_quantity)
 
-    if next(requiredIngredients, item) == nil then
+    if next(requiredIngredients, _) == nil then
       finished = true
     end
 
