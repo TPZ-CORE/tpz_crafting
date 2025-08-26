@@ -296,6 +296,7 @@ RegisterNUICallback('requestRecipe', function(data)
 
     SelectedRecipeItem = data.recipe
 
+    Wait(500)
     -- Loading the selected recipe data.
     SendNUIMessage({ action = 'loadSelectedRecipe', result = recipe, locked = data.locked })
 
