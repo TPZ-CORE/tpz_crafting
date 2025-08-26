@@ -218,6 +218,17 @@ RegisterNUICallback('requestCategoryRecipes', function(data)
 
     SELECTED_CRAFTING_CATEGORY = data.category
 
+    local category_header, category_description = Config.Categories[data.category].Label, ""
+
+    if Config.Categories[data.category].Description ~= nil then
+      category_description = Config.Categories[data.category].Description
+    end
+
+    SendNUIMessage({ 
+        action = 'loadInformation',
+        crafting_det = {header = category_header, description = category_description },
+    })
+
     local elements = {}
 
     -- CurrentItemMetadata
