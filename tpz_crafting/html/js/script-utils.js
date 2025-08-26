@@ -1,6 +1,6 @@
 
-let CURRENT_PAGE_CLASS_NAME = null;
-let CurrentPageType      = null;
+let CURRENT_PAGE_CLASS_NAME     = null;
+let CURRENT_PAGE_TYPE           = null;
 
 let SELECTED_RECIPE_DIV_CLASS   = null;
 let MAIN_NUI_HEADER_TITLE       = null;
