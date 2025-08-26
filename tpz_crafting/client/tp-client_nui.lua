@@ -10,6 +10,8 @@ local CurrentItemId           = nil
 
 local UnlockedRecipes         = {}
 
+local SELECTED_CRAFTING_CATEGORY = nil
+
 -----------------------------------------------------------
 --[[ Local Functions  ]]--
 -----------------------------------------------------------
@@ -17,8 +19,8 @@ local UnlockedRecipes         = {}
 local DoesRecipeExist = function(item)
 
     for index, recipe in pairs (Config.CraftingRecipes) do
-  
-      if item == recipe.item then
+
+      if SELECTED_CRAFTING_CATEGORY == recipe.Category and item == recipe.Item then
         return true, recipe
       end
   
@@ -214,6 +216,8 @@ RegisterNUICallback('requestCategoryRecipes', function(data)
         return
     end
 
+    SELECTED_CRAFTING_CATEGORY = data.category
+
     local elements = {}
 
     -- CurrentItemMetadata
@@ -404,9 +408,9 @@ RegisterNUICallback('craftSelectedRecipe', function(data)
                 PerformCraftingAction(playerPed, locationData.AnimationType, recipe)
     
                 if not recipe.IsRepairable then
-                    TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
+                    TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", SELECTED_CRAFTING_CATEGORY, item)
                 else
-                    TriggerServerEvent("tpz_crafting:server:repairCrafting", item, data.uniqueId)
+                    TriggerServerEvent("tpz_crafting:server:repairCrafting", SELECTED_CRAFTING_CATEGORY, item, data.uniqueId)
                 end
            
             else
@@ -417,9 +421,9 @@ RegisterNUICallback('craftSelectedRecipe', function(data)
                 TaskStandStill(playerPed, 1)
 
                 if not recipe.IsRepairable then
-                    TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
+                    TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", SELECTED_CRAFTING_CATEGORY, item)
                 else
-                    TriggerServerEvent("tpz_crafting:server:repairCrafting", item, data.uniqueId)
+                    TriggerServerEvent("tpz_crafting:server:repairCrafting", SELECTED_CRAFTING_CATEGORY, item, data.uniqueId)
                 end
             end
                 
@@ -495,7 +499,7 @@ RegisterNUICallback('craftSelectedRecipe', function(data)
                     TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
                     
                 elseif recipe.IsRepairable then
-                    TriggerServerEvent("tpz_crafting:server:repairCrafting", item, data.uniqueId)
+                    TriggerServerEvent("tpz_crafting:server:repairCrafting", SELECTED_CRAFTING_CATEGORY, item, data.uniqueId)
                 end
 
             end, { item = item, uniqueId = data.uniqueId } )
