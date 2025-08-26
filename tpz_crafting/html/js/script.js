@@ -13,8 +13,8 @@ $(function() {
       if (item.toggle){
         LoadBackgroundImage('default');
 
-        CurrentPageType = "MAIN";
-        CurrentPageClassName = "mainpage";
+        CURRENT_PAGE_TYPE = "MAIN";
+        CURRENT_PAGE_CLASS_NAME = "mainpage";
 
         $('.mainpage').fadeIn();
 
@@ -119,7 +119,7 @@ $(function() {
 
   $("body").on("keyup", function (key) {
     if (key.which == 27){ 
-      CurrentPageType == "MAIN" || CurrentPageType == null ? CloseNUI() : OnBackButtonAction();
+      CURRENT_PAGE_TYPE == "MAIN" || CURRENT_PAGE_TYPE == null ? CloseNUI() : OnBackButtonAction();
     } 
   });
 
@@ -135,11 +135,11 @@ $(function() {
     $("#crafting-title").text(MAIN_NUI_HEADER_TITLE);
     $("#crafting-description").text(MAIN_NUI_HEADER_DESCRIPTION);
 
-    $('.' + CurrentPageClassName).fadeOut();
+    $('.' + CURRENT_PAGE_CLASS_NAME).fadeOut();
     $('.mainpage').fadeIn();
 
-    CurrentPageType = "MAIN";
-    CurrentPageClassName = "mainpage";
+    CURRENT_PAGE_TYPE = "MAIN";
+    CURRENT_PAGE_CLASS_NAME = "mainpage";
 
     $('#ingredients').html('');
 
@@ -172,8 +172,8 @@ $(function() {
       category : $category,
     }));
 
-    CurrentPageType = "RECIPES";
-    CurrentPageClassName = "recipespage";
+    CURRENT_PAGE_TYPE = "RECIPES";
+    CURRENT_PAGE_CLASS_NAME = "recipespage";
     
     $('.mainpage').fadeOut();
     $('.recipespage').fadeIn();
