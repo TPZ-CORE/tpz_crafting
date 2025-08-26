@@ -188,6 +188,9 @@ Config.CraftingRecipes = {
         -- The following option is for buildable types which will be built directly from crafting script, such as (Campfire, Tents) 
         IsBuildable       = false,
         
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
+
         IsCookable        = true,   -- The following item will be crafted only if the player is close to a campfire or an oven.
 
         Quantity          = 1,      -- The quantity that will be given to the player after the recipe will be successfully crafted.
@@ -221,6 +224,9 @@ Config.CraftingRecipes = {
 
         IsBuildable       = false,
         IsCookable        = true, 
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
@@ -248,6 +254,9 @@ Config.CraftingRecipes = {
 
         IsBuildable       = false,
         IsCookable        = true, 
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
@@ -279,6 +288,9 @@ Config.CraftingRecipes = {
 
         IsBuildable       = "p_campfire05x",
         IsCookable        = false,   -- Always false if the recipe is buildable.
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,  -- Always (1) if the recipe is buildable.
 
@@ -309,6 +321,9 @@ Config.CraftingRecipes = {
 
         IsBuildable       = "mp005_s_posse_tent_bountyhunter07x",
         IsCookable        = false,   -- Always false if the recipe is buildable.
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,  -- Always (1) if the recipe is buildable.
 
@@ -350,6 +365,9 @@ Config.CraftingRecipes = {
 
         -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
         IsRepairable      = true, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
@@ -378,6 +396,9 @@ Config.CraftingRecipes = {
         Metadata          = false,
 
         IsCookable        = false,
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 10,
 
@@ -405,6 +426,9 @@ Config.CraftingRecipes = {
         Metadata          = false,
 
         IsCookable        = false,
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
@@ -433,6 +457,9 @@ Config.CraftingRecipes = {
         Metadata          = false,
 
         IsCookable        = false,
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
@@ -461,6 +488,9 @@ Config.CraftingRecipes = {
         Metadata          = false,
 
         IsCookable        = false,
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
@@ -488,6 +518,9 @@ Config.CraftingRecipes = {
         Metadata          = false,
 
         IsCookable        = false,
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
@@ -515,6 +548,9 @@ Config.CraftingRecipes = {
         Metadata          = false,
 
         IsCookable        = false,
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
@@ -547,6 +583,9 @@ Config.CraftingRecipes = {
         Metadata          = false,
 
         IsCookable        = true,
+        
+        -- @IsRepairable will show a new input on the NUI for inserting the weapon or the item unique ID.
+        IsRepairable      = false, -- ONLY FOR WEAPONS OR ITEMS THAT HAVE DURABILITY (EXCEPT FOOD) - REPAIRS 100%.
 
         Quantity          = 1,
 
