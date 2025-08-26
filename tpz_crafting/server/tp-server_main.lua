@@ -19,11 +19,11 @@ function GetCraftingLocations()
 end
 
 
-DoesRecipeExist = function(item)
+DoesRecipeExist = function(category, item)
 
   for index, recipe in pairs (Config.CraftingRecipes) do
 
-    if item == recipe.Item then
+    if category == recipe.Category and item == recipe.Item then
       return true, recipe
     end
 
@@ -72,12 +72,12 @@ end)
 -----------------------------------------------------------
 
 RegisterServerEvent("tpz_crafting:server:repairCrafting")
-AddEventHandler("tpz_crafting:server:repairCrafting", function(item, itemId)
+AddEventHandler("tpz_crafting:server:repairCrafting", function(category, item, itemId)
   local _source = source
   local xPlayer = TPZ.GetPlayer(_source)
 
   -- 100% devtools injection.
-  local DoesRecipeExist, RecipeData = DoesRecipeExist(item)
+  local DoesRecipeExist, RecipeData = DoesRecipeExist(category, item)
   if not DoesRecipeExist or item == nil then
 
     if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
@@ -100,12 +100,12 @@ AddEventHandler("tpz_crafting:server:repairCrafting", function(item, itemId)
 end)
 
 RegisterServerEvent("tpz_crafting:server:receiveCraftingRecipe")
-AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(item)
+AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(category, item)
   local _source = source
   local xPlayer = TPZ.GetPlayer(_source)
 
   -- 100% devtools injection.
-  local DoesRecipeExist, RecipeData = DoesRecipeExist(item)
+  local DoesRecipeExist, RecipeData = DoesRecipeExist(category, item)
   if not DoesRecipeExist or item == nil then
 
     if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
