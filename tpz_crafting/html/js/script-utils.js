@@ -4,6 +4,8 @@ var CurrentPageType      = null;
 
 var IsWriting            = false;
 
+let SELECTED_RECIPE_DIV_CLASS = null;
+
 const loadScript = (FILE_URL, async = true, type = "text/javascript") => {
   return new Promise((resolve, reject) => {
       try {
