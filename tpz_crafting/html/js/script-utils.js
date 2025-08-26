@@ -1,11 +1,9 @@
 
-var CurrentPageClassName = null;
-var CurrentPageType      = null;
+let CURRENT_PAGE_CLASS_NAME = null;
+let CurrentPageType      = null;
 
-var IsWriting            = false;
-
-let SELECTED_RECIPE_DIV_CLASS = null;
-let MAIN_NUI_HEADER_TITLE = null;
+let SELECTED_RECIPE_DIV_CLASS   = null;
+let MAIN_NUI_HEADER_TITLE       = null;
 let MAIN_NUI_HEADER_DESCRIPTION = null;
 
 const loadScript = (FILE_URL, async = true, type = "text/javascript") => {
