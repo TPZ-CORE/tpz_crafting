@@ -141,17 +141,17 @@ Config.CraftingBookItems = {
 -- The following will be the categories you will be using and their displays.
 Config.Categories = {
 
-    ['food']                  = { Label = "Cooking Recipes" },
-    ['crafts']                = { Label = "Crafts" },
-    ['food_saloon']           = { Label = "Speciality Saloon Food Recipes" },
-    ['blacksmith']            = { Label = "General Crafts" },
-    ['blacksmith_horses']     = { Label = "Horse Crafts" },
-    ['gunsmith_repairs']      = { Label = "Weapon Repairs" },
-    ['gunsmith_parts']        = { Label = "Weapon Parts" },
-    ['beekeepers']            = { Label = "Beekeepers Handcrafts & Honey Products" },
-    ['collectors_watches']    = { Label = "Watches" },
-    ['collectors_fireworks']  = { Label = "Fireworks & Firecrackers" },
-    ['vets']                  = { Label = "Doggie Products" },
+    ['food']                  = { Label = "Cooking Recipes", Description = " " },
+    ['crafts']                = { Label = "Crafts", Description = " " },
+    ['food_saloon']           = { Label = "Speciality Saloon Food Recipes", Description = " " },
+    ['blacksmith']            = { Label = "General Crafts", Description = " " },
+    ['blacksmith_horses']     = { Label = "Horse Crafts", Description = " " },
+    ['gunsmith_repairs']      = { Label = "Weapon Repairs", Description = " " },
+    ['gunsmith_parts']        = { Label = "Weapon Parts", Description = " " },
+    ['beekeepers']            = { Label = "Beekeepers Handcrafts & Honey Products", Description = " " },
+    ['collectors_watches']    = { Label = "Watches", Description = " " },
+    ['collectors_fireworks']  = { Label = "Fireworks & Firecrackers", Description = " " },
+    ['vets']                  = { Label = "Doggie Products", Description = " " },
 }
 
 -----------------------------------------------------------
