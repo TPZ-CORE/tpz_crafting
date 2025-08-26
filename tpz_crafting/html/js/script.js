@@ -23,6 +23,11 @@ $(function() {
     } else if (event.data.action == "loadInformation"){
       var prod_crafting = event.data.crafting_det;
 
+        if (MAIN_NUI_HEADER_TITLE == null){
+            MAIN_NUI_HEADER_TITLE = prod_crafting.header;
+            MAIN_NUI_HEADER_DESCRIPTION = prod_crafting.description;
+        }
+        
       $("#crafting-title").text(prod_crafting.header);
       $("#crafting-description").text(prod_crafting.description);
 
@@ -126,6 +131,9 @@ $(function() {
     playAudio("button_click.wav");
 
     $('#recipes').html('');
+    
+    $("#crafting-title").text(MAIN_NUI_HEADER_TITLE);
+    $("#crafting-description").text(MAIN_NUI_HEADER_DESCRIPTION);
 
     $('.' + CurrentPageClassName).fadeOut();
     $('.mainpage').fadeIn();
