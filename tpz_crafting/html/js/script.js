@@ -34,10 +34,11 @@ $(function() {
     
     } else if (event.data.action == "loadCategoryRecipe"){
 
+      let recipeClass = event.data.label.trim().replaceAll(' ', '-').toLowerCase();
       if (event.data.locked) {
-        $("#recipes").append( `<div id="recipes-main" ></div>` + `<div locked = "1" recipe = "` + event.data.recipe + `" id="recipes-label" style = "color: rgba(34, 34, 34, 0.442); text-decoration-line: line-through; ">` + event.data.label + `</div>` );
+        $("#recipes").append( `<div id="recipes-main"></div>` + `<div locked = "1" recipe = "` + event.data.recipe + `" id="recipes-label" class = "recipe-` + recipeClass + `" style = "color: rgba(34, 34, 34, 0.442); text-decoration-line: line-through; ">` + event.data.label + `</div>` );
       }else{
-        $("#recipes").append( `<div id="recipes-main" ></div>` + `<div locked = "0" recipe = "` + event.data.recipe + `" id="recipes-label">` + event.data.label + `</div>` );
+        $("#recipes").append( `<div id="recipes-main"></div>` + `<div locked = "0" recipe = "` + event.data.recipe + `" id="recipes-label" class = "recipe-` + recipeClass + `">` + event.data.label + `</div>` );
       }
 
     } else if (event.data.action == "loadSelectedRecipe"){
@@ -76,15 +77,18 @@ $(function() {
   
           document.getElementById("recipe-image-background").style.backgroundImage = `url(${image})`;
           $("#recipe-image-background").show();
-          $(".selectedrecipepage").fadeIn(1000);
-
         });
-
-      }else{
-        $(".selectedrecipepage").fadeIn(1000);
       }
+      
+      let recipeClass = prod_recipe.Label.trim().replaceAll(' ', '-').toLowerCase();
+      SELECTED_RECIPE_DIV_CLASS = "recipe-" + recipeClass;
 
-      setTimeout(()=>{ HasCooldown = false; }, 1100);
+      $(".selectedrecipepage").fadeIn(1000);
+      
+      setTimeout(()=>{ 
+        HasCooldown = false; 
+      
+      }, 1000);
 
     } else if (event.data.action == "loadSelectedRecipeIngredients"){
 
@@ -113,7 +117,6 @@ $(function() {
       CurrentPageType == "MAIN" || CurrentPageType == null ? CloseNUI() : OnBackButtonAction();
     } 
   });
-
 
   /*-----------------------------------------------------------
    Back Button Actions
@@ -168,10 +171,17 @@ $(function() {
     $('.recipespage').fadeIn();
   });
 
-  
   $("#crafting").on("click", "#recipes-label", function() {
 
     if (HasCooldown) { return; }
+
+    if (SELECTED_RECIPE_DIV_CLASS) {
+
+      $("." + SELECTED_RECIPE_DIV_CLASS).css("text-decoration", "none"); // remove underline
+    }
+
+    $(this).css("text-decoration", "underline");
+
     HasCooldown = true;
 
     playAudio("button_click.wav");
