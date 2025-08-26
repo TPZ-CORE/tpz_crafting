@@ -5,6 +5,8 @@ var CurrentPageType      = null;
 var IsWriting            = false;
 
 let SELECTED_RECIPE_DIV_CLASS = null;
+let MAIN_NUI_HEADER_TITLE = null;
+let MAIN_NUI_HEADER_DESCRIPTION = null;
 
 const loadScript = (FILE_URL, async = true, type = "text/javascript") => {
   return new Promise((resolve, reject) => {
@@ -161,6 +163,10 @@ function SetRecipeAsNotReadable(){
 }
 
 function CloseNUI() {
+  
+  MAIN_NUI_HEADER_TITLE = null;
+  MAIN_NUI_HEADER_DESCRIPTION = null;
+
   $('#crafting').fadeOut();
 
   $(".mainpage").fadeOut();
