@@ -11,7 +11,8 @@ Locales = {
     ['PICKING_UP']                            = "Picking up ",
 
     ['READING_RECIPE']                        = "Reading recipe..",
-
+    ['NO_INGREDIENTS']                        = 'There are no ingredients available for this recipe.',
+    
     -- Required for exp_target_menu
     -- Adding the placed objects name, it will display the input label (if not, Object will be displayed).
     ['p_furnace01x']                          = "Furnace",
@@ -27,5 +28,6 @@ Locales = {
         icon = "achievement",
         duration = 5
     },
+
 
 }
