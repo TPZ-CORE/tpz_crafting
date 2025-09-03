@@ -97,11 +97,17 @@ $(function() {
 
     } else if (event.data.action == "loadSelectedRecipeIngredients"){
 
+      let quantityDisplay = 'X' + event.data.quantity;
+
+      if (event.data.quantity == null) {
+        quantityDisplay = '';
+      }
+
       if (RequiredBlueprint != null && RequiredBlueprint != false ) {
-        $("#ingredients").append( `<div id="ingredients-main" ></div>` + `<div id="ingredients-label" style = "color: transparent; text-shadow: 0 0 8px #000;" >X` + event.data.quantity + " " + event.data.label + `</div>` );
+        $("#ingredients").append(`<div id="ingredients-main" ></div>` + `<div id="ingredients-label" style = "color: transparent; text-shadow: 0 0 8px #000;" >` + quantityDisplay + " " + event.data.label + `</div>` );
 
       }else {
-        $("#ingredients").append( `<div id="ingredients-main" ></div>` + `<div id="ingredients-label">X` + event.data.quantity + " " + event.data.label + `</div>` );
+        $("#ingredients").append(`<div id="ingredients-main" ></div>` + `<div id="ingredients-label">` + quantityDisplay + " " + event.data.label + `</div>` );
       }
 
     } else if (event.data.action == "resetCooldown"){
