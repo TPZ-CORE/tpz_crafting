@@ -316,16 +316,24 @@ RegisterNUICallback('requestRecipe', function(data)
     SendNUIMessage({ action = 'loadSelectedRecipe', result = recipe, locked = data.locked })
 
     
-    for _, ingredient in pairs (recipe.Ingredients) do
+       SendNUIMessage({ action = 'loadSelectedRecipe', result = recipe, locked = data.locked })
 
-        local label = "undefined"
+    if TPZ.GetTableLength(recipe.Ingredients) > 0 then
 
-        if TPZInv.getItemData(ingredient.item) then
-            label = TPZInv.getItemData(ingredient.item).label
+        for _, ingredient in pairs (recipe.Ingredients) do
+
+            local label = "undefined"
+    
+            if TPZInv.getItemData(ingredient.item) then
+                label = TPZInv.getItemData(ingredient.item).label
+            end
+    
+            SendNUIMessage({ action = 'loadSelectedRecipeIngredients', label = label, quantity = ingredient.required_quantity })
+    
         end
 
-        SendNUIMessage({ action = 'loadSelectedRecipeIngredients', label = label, quantity = ingredient.required_quantity })
-
+    else
+        SendNUIMessage({ action = 'loadSelectedRecipeIngredients', label = Locales['NO_INGREDIENTS'], quantity = nil })
     end
 
 end)
@@ -523,3 +531,4 @@ end)
 RegisterNUICallback('close', function()
 	ToggleNUI(false)
 end)
+
