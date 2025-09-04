@@ -313,10 +313,8 @@ RegisterNUICallback('requestRecipe', function(data)
 
     Wait(500)
     -- Loading the selected recipe data.
-    SendNUIMessage({ action = 'loadSelectedRecipe', result = recipe, locked = data.locked })
 
-    
-       SendNUIMessage({ action = 'loadSelectedRecipe', result = recipe, locked = data.locked })
+    SendNUIMessage({ action = 'loadSelectedRecipe', result = recipe, locked = data.locked })
 
     if TPZ.GetTableLength(recipe.Ingredients) > 0 then
 
@@ -335,6 +333,7 @@ RegisterNUICallback('requestRecipe', function(data)
     else
         SendNUIMessage({ action = 'loadSelectedRecipeIngredients', label = Locales['NO_INGREDIENTS'], quantity = nil })
     end
+
 
 end)
 
@@ -447,7 +446,7 @@ RegisterNUICallback('craftSelectedRecipe', function(data)
             end
                 
         
-        end, { item = item, uniqueId = data.uniqueId } )
+        end, { category = SELECTED_CRAFTING_CATEGORY, item = item, uniqueId = data.uniqueId } )
 
     elseif type == "ITEM" then
 
@@ -521,7 +520,7 @@ RegisterNUICallback('craftSelectedRecipe', function(data)
                     TriggerServerEvent("tpz_crafting:server:repairCrafting", SELECTED_CRAFTING_CATEGORY, item, data.uniqueId)
                 end
 
-            end, { item = item, uniqueId = data.uniqueId } )
+            end, { category = SELECTED_CRAFTING_CATEGORY, item = item, uniqueId = data.uniqueId } )
 
         end
 
@@ -531,4 +530,3 @@ end)
 RegisterNUICallback('close', function()
 	ToggleNUI(false)
 end)
-
