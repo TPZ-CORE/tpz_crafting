@@ -76,6 +76,11 @@ AddEventHandler("tpz_crafting:server:repairCrafting", function(category, item, i
   local _source = source
   local xPlayer = TPZ.GetPlayer(_source)
 
+  local identifier = xPlayer.getIdentifier()
+  local charIdentifier = xPlayer.getCharacterIdentifier()
+  local steamName = GetPlayerName(_source)
+  local fullname  = xPlayer.getFirstName() .. ' ' .. xPlayer.getLastName()
+
   -- 100% devtools injection.
   local DoesRecipeExist, RecipeData = DoesRecipeExist(category, item)
   if not DoesRecipeExist or item == nil then
@@ -83,7 +88,7 @@ AddEventHandler("tpz_crafting:server:repairCrafting", function(category, item, i
     if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
       local _w, _c      = Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Url, Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
       local description = 'The specified user attempted to use devtools / injection cheat on stores for crafting - repairing products.'
-      TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, PlayerData.steamName, PlayerData.username, PlayerData.identifier, PlayerData.charIdentifier, description, _c)
+      TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, steamName, fullname, identifier, charIdentifier, description, _c)
     end
 
     --xPlayer.disconnect(Locales['DEVTOOLS_INJECTION_DETECTED'])
@@ -104,6 +109,11 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(category, 
   local _source = source
   local xPlayer = TPZ.GetPlayer(_source)
 
+  local identifier = xPlayer.getIdentifier()
+  local charIdentifier = xPlayer.getCharacterIdentifier()
+  local steamName = GetPlayerName(_source)
+  local fullname  = xPlayer.getFirstName() .. ' ' .. xPlayer.getLastName()
+
   -- 100% devtools injection.
   local DoesRecipeExist, RecipeData = DoesRecipeExist(category, item)
   if not DoesRecipeExist or item == nil then
@@ -111,7 +121,7 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(category, 
     if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
       local _w, _c      = Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Url, Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
       local description = 'The specified user attempted to use devtools / injection cheat on stores for buying products.'
-      TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, PlayerData.steamName, PlayerData.username, PlayerData.identifier, PlayerData.charIdentifier, description, _c)
+      TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, steamName, fullname, identifier, charIdentifier, description, _c)
     end
 
     --xPlayer.disconnect(Locales['DEVTOOLS_INJECTION_DETECTED'])
@@ -120,32 +130,6 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(category, 
   end
 
   local requiredIngredients = RecipeData.Ingredients
-  local contains            = true
-
-  -- We are checking again for ingredients in case the player performed a devtools injection / not.
-  for _, ingredient in pairs(requiredIngredients) do
-
-    local itemQuantity = xPlayer.getItemQuantity(ingredient.item)
-
-    if itemQuantity == nil or itemQuantity == 0 or itemQuantity < ingredient.required_quantity then
-      contains = false
-    end
-
-  end
-
-  -- 100% devtools injection, player deleted the callback on client for checking the ingredients.
-  if not contains then
-
-    if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
-      local _w, _c      = Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Url, Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
-      local description = 'The specified user attempted to use devtools / injection cheat on stores for buying products.'
-      TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, PlayerData.steamName, PlayerData.username, PlayerData.identifier, PlayerData.charIdentifier, description, _c)
-    end
-
-    xPlayer.ban(Locales['DEVTOOLS_INJECTION_DETECTED'], -1)
-    --xPlayer.disconnect(Locales['DEVTOOLS_INJECTION_DETECTED'])
-    return
-  end
 
   -- We are removing the crafting ingredients.
   for _, ingredient in pairs(requiredIngredients) do
