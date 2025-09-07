@@ -129,13 +129,6 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(category, 
     return
   end
 
-  local requiredIngredients = RecipeData.Ingredients
-
-  -- We are removing the crafting ingredients.
-  for _, ingredient in pairs(requiredIngredients) do
-    xPlayer.removeItem(ingredient.item, ingredient.required_quantity)
-  end
-
   -- We get the input metadata if available.
   local metadata = nil
 
