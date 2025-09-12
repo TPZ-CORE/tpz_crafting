@@ -123,79 +123,78 @@ Citizen.CreateThread(function()
     RegisterActionPrompt()
 
     while true do
-        Citizen.Wait(0)
 
-        local sleep  = true
-
+        local sleep  = 1000
         local player = PlayerPedId()
 
         local coords = GetEntityCoords(player)
-        local isDead = IsEntityDead(player)
+        local isPlayerDead = IsEntityDead(player)
 
         -- The following does not need a new thread for preventing opening the inventory.
         if PlayerData.HasCooldown then
             TriggerEvent('tpz_inventory:closePlayerInventory')
         end
 
-        if not isDead and not PlayerData.HasCraftingOpen and PlayerData.Loaded and not PlayerData.HasCooldown then
+        if isPlayerDead or PlayerData.HasCraftingOpen or not PlayerData.Loaded or PlayerData.HasCooldown then
+            goto END
+        end
 
-            for index, craftingConfig in pairs(Config.Locations) do
+        for index, craftingConfig in pairs(Config.Locations) do
 
-                local coordsDist  = vector3(coords.x, coords.y, coords.z)
-                local coordsCrafting = vector3(craftingConfig.Coords.x, craftingConfig.Coords.y, craftingConfig.Coords.z)
-                
-                local distance    = #(coordsDist - coordsCrafting)
-                local propConfig  = craftingConfig.CraftingProp
+            local coordsDist  = vector3(coords.x, coords.y, coords.z)
+            local coordsCrafting = vector3(craftingConfig.Coords.x, craftingConfig.Coords.y, craftingConfig.Coords.z)
+            
+            local distance    = #(coordsDist - coordsCrafting)
+            local propConfig  = craftingConfig.CraftingProp
 
-                if Config.Locations[index].PropEntity and ( distance > propConfig.RenderDistance ) then
+            if Config.Locations[index].PropEntity and ( distance > propConfig.RenderDistance ) then
 
-                    exports.tpz_core:getCoreAPI().RemoveEntityProperly(Config.Locations[index].PropEntity, GetHashKey(Config.Locations[index].CraftingProp.Prop))
+                exports.tpz_core:getCoreAPI().RemoveEntityProperly(Config.Locations[index].PropEntity, GetHashKey(Config.Locations[index].CraftingProp.Prop))
 
-                    Config.Locations[index].PropEntity = nil
-                end
-                
-                if propConfig.Enabled and not Config.Locations[index].PropEntity and distance <= propConfig.RenderDistance then
-                    SpawnEntityProp(index)
-                end
-
-                local isCraftingAllowed = ContainsJob(craftingConfig)
-                
-                if isCraftingAllowed then
-
-                    if craftingConfig.DrawText and distance <= craftingConfig.DrawTextRenderDistance then
-                        sleep = false
-                        DrawText3D(craftingConfig.Coords.x, craftingConfig.Coords.y, craftingConfig.Coords.z , craftingConfig.DrawText)
-                    end
-    
-                    if distance <= craftingConfig.ActionDistance then
-
-                        sleep = false
-    
-                        local label = CreateVarString(10, 'LITERAL_STRING', craftingConfig.PromptFooterDisplay)
-                        local str   = CreateVarString(10, 'LITERAL_STRING', craftingConfig.PromptActionDisplay)
-                        
-                        local Prompts, PromptsList = GetPromptData()
-
-                        PromptSetText(PromptsList, str)
-                        PromptSetActiveGroupThisFrame(Prompts, label)
-    
-                        if PromptHasHoldModeCompleted(PromptsList) then
-    
-                            OpenCraftingByLocationIndex(index)
-
-                            Wait(1000)
-                        end
-
-                    end
-
-                end    
+                Config.Locations[index].PropEntity = nil
             end
+            
+            if propConfig.Enabled and not Config.Locations[index].PropEntity and distance <= propConfig.RenderDistance then
+                SpawnEntityProp(index)
+            end
+
+            local isCraftingAllowed = ContainsJob(craftingConfig)
+            
+            if isCraftingAllowed then
+
+                if craftingConfig.DrawText and distance <= craftingConfig.DrawTextRenderDistance then
+                    sleep = 0
+                    DrawText3D(craftingConfig.Coords.x, craftingConfig.Coords.y, craftingConfig.Coords.z , craftingConfig.DrawText)
+                end
+
+                if distance <= craftingConfig.ActionDistance then
+
+                    sleep = 0
+
+                    local label = CreateVarString(10, 'LITERAL_STRING', craftingConfig.PromptFooterDisplay)
+                    local str   = CreateVarString(10, 'LITERAL_STRING', craftingConfig.PromptActionDisplay)
+                    
+                    local Prompts, PromptsList = GetPromptData()
+
+                    PromptSetText(PromptsList, str)
+                    PromptSetActiveGroupThisFrame(Prompts, label)
+
+                    if PromptHasHoldModeCompleted(PromptsList) then
+
+                        OpenCraftingByLocationIndex(index)
+
+                        Wait(1000)
+                    end
+
+                end
+
+            end    
         end
 
-        if sleep then
-            Citizen.Wait(1000)
-        end
+        ::END::
+        Wait(sleep)
     end
+
 end)
 
 
