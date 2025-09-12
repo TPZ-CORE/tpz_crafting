@@ -205,62 +205,51 @@ Citizen.CreateThread(function ()
     RegisterPickupActionPrompt()
 
     while true do
-        
-        Wait(0)
 
-        local sleep  = true
+        local sleep      = 1500
+        local player     = PlayerPedId()
 
-        local player = PlayerPedId()
-
-        local coords = GetEntityCoords(player)
-        local isDead = IsEntityDead(player)
+        local coords     = GetEntityCoords(player)
+        local isDead     = IsEntityDead(player)
 
         local PlayerData = GetPlayerData()
+        local length     = TPZ.GetTableLength(CraftedObjects)
+
+        if isDead or not PlayerData.Loaded or PlayerData.HasCooldown or PlayerData.HasCraftingOpen or length <= 0 then
+            goto END
+        end
         
-        if not isDead and PlayerData.Loaded and not PlayerData.HasCooldown and not PlayerData.HasCraftingOpen then
+        for _, object in pairs (CraftedObjects) do
 
-            local length = TPZ.GetTableLength(CraftedObjects)
-            if length > 0 then
+            local distance = #(coords - vector3(object.coords.x, object.coords.y, object.coords.z))
 
-                for _, object in pairs (CraftedObjects) do
-                    
-                    local coordsDist  = vector3(coords.x, coords.y, coords.z)
-                    local coordsBuild = vector3(object.coords.x, object.coords.y, object.coords.z)
-            
-                    local distance    = #(coordsDist - coordsBuild)
+            if distance <= Config.PickupObjectDistance then
+                sleep = 0
 
-                    if distance <= Config.PickupObjectDistance then
-                        sleep = false
+                local pickupLabel = "Object"
 
-                        local pickupLabel = "Object"
+                if Locales[object.model] then
+                    pickupLabel = Locales[object.model]
+                end
 
-                        if Locales[object.model] then
-                            pickupLabel = Locales[object.model]
-                        end
+                local label = CreateVarString(10, 'LITERAL_STRING', pickupLabel)
+                
+                local Prompts, PromptsList = GetPickupPromptData()
+                PromptSetActiveGroupThisFrame(Prompts, label)
 
-                        local label = CreateVarString(10, 'LITERAL_STRING', pickupLabel)
-                        
-                        local Prompts, PromptsList = GetPickupPromptData()
-                        PromptSetActiveGroupThisFrame(Prompts, label)
-    
-                        if PromptHasHoldModeCompleted(PromptsList) then
-    
-                            PickupPlacedObject(object.object, object.model, object.recipe)
+                if PromptHasHoldModeCompleted(PromptsList) then
 
-                            Wait(1000)
-                        end
+                    PickupPlacedObject(object.object, object.model, object.recipe)
 
-                    end
-
+                    Wait(1000)
                 end
 
             end
 
         end
 
-        if sleep then
-            Citizen.Wait(1000)
-        end
-
+        ::END::
+        Wait(sleep)
     end
+
 end)
