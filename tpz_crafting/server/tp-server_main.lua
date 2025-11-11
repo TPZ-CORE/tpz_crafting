@@ -156,6 +156,17 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(category, 
 
   end
 
+  if RecipeData.ReturnItems ~= nil and RecipeData.ReturnItems ~= false then 
+
+    if GetTableLength(RecipeData.ReturnItems) > 0 then
+
+      for _, returnItem in pairs (RecipeData.ReturnItems) do 
+        xPlayer.addItem(returnItem.item, returnItem.quantity)
+      end
+
+    end
+
+  end
   -- webhook ?
   -- notification?
 end)
@@ -277,3 +288,4 @@ Citizen.CreateThread(function()
     end
 
 end)
+
