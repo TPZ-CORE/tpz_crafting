@@ -198,7 +198,11 @@ Config.CraftingRecipes = {
         Duration          = 10,     -- The time is seconds (Crafting Duration).
 
         Ingredients       = { { item = 'meat', required_quantity = 1 } }, -- The required ingredients for crafting the following recipe.
-    
+
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+
         -- The information about the crafting recipe.
         -- Use \n for new lines.
         RecipeInformation = "Cooked meat is a versatile and delicious ingredient that can be used in a variety of dishes, from savory sandwiches to hearty stews. However, proper storage and preservation are crucial to maintaining its quality, taste, and safety.",
@@ -234,6 +238,10 @@ Config.CraftingRecipes = {
 
         Ingredients       = { { item = 'biggame', required_quantity = 1 } },
     
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "Cooked biggame's meat is a versatile and delicious ingredient that can be used in a variety of dishes, from savory sandwiches to hearty stews. However, proper storage and preservation are crucial to maintaining its quality, taste, and safety.",
 
         ActionDisplay     = "Press here to start cooking.",
@@ -264,6 +272,10 @@ Config.CraftingRecipes = {
 
         Ingredients       = { { item = 'bison_meat', required_quantity = 1 } } ,
     
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "Cooked bison's meat is a versatile and delicious ingredient that can be used in a variety of dishes, from savory sandwiches to hearty stews. However, proper storage and preservation are crucial to maintaining its quality, taste, and safety.",
 
         ActionDisplay     = "Press here to start cooking.",
@@ -301,6 +313,10 @@ Config.CraftingRecipes = {
             { item = 'wooden_sticks', required_quantity = 6 },
         },
     
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "A campfire is a fire at a campsite that provides light and warmth, and heat for cooking. It can also serve as a beacon, and an insect and predator deterrent. Established campgrounds often provide a stone or steel fire ring for safety.",
 
         ActionDisplay     = "Press here to start crafting.",
@@ -337,6 +353,10 @@ Config.CraftingRecipes = {
             { item = 'fibers',        required_quantity = 6 },
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "A Tent is temporary accommodation which can be easily dismantled and which is portable. A tent is a movable, lightweight shelter which uses fabric to protect people from wind, rain and from the cold.\nIt also provides a private and comfortable place to sleep and store your gear. Without a tent, you would be exposed to the elements, insects, and wildlife.",
 
         ActionDisplay     = "Press here to start crafting.",
@@ -378,6 +398,10 @@ Config.CraftingRecipes = {
             { item = 'oilbottle',      required_quantity = 5  }, 
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "",
         ActionDisplay     = "Press here to start the repair.",
         ProgressDisplay   = "Repairing weapon..",
@@ -408,6 +432,10 @@ Config.CraftingRecipes = {
             { item = 'copper',          required_quantity = 10 },
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing weapon screws..",
@@ -439,6 +467,10 @@ Config.CraftingRecipes = {
             { item = 'steel',  required_quantity = 1 },
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing weapon spring..",
@@ -470,6 +502,10 @@ Config.CraftingRecipes = {
             { item = 'steel',  required_quantity = 1 },
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing weapon screws..",
@@ -500,6 +536,10 @@ Config.CraftingRecipes = {
             { item = 'steel', required_quantity = 5 },
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing weapon cylinder..",
@@ -530,6 +570,10 @@ Config.CraftingRecipes = {
             { item = 'steel', required_quantity = 10 },
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing weapon cylinder..",
@@ -561,6 +605,10 @@ Config.CraftingRecipes = {
             { item = 'metal',         required_quantity = 5 },
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "",
         ActionDisplay     = "Press here to start crafting.",
         ProgressDisplay   = "Preparing a weapon stock..",
@@ -600,6 +648,10 @@ Config.CraftingRecipes = {
             { item = 'salt',             required_quantity = 1 },
         },
 
+        ReturnItems = {
+            --{ item = 'itemname', quantity = 1 },
+        },
+        
         RecipeInformation = "Vegetable stew is a hearty and comforting recipe made with a variety of vegetables cooked in a flavorful broth! It is a healthy and versatile meal. Great for the colder weather, family dinners, meal prep, and leftovers!",
         ActionDisplay     = "Press here to start cooking.",
         ProgressDisplay   = "Preparing veggie stew..",
@@ -919,3 +971,4 @@ function SendNotification(source, message, messageType)
     end
   
 end
+
