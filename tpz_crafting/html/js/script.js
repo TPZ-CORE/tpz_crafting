@@ -61,6 +61,7 @@ $(function() {
       }else{
         $("#recipe-image-background").css('opacity', 0.8);
         $('#recipe-craft-button').text(prod_recipe.ActionDisplay);
+        $('#recipe-craft-button').show();
       }
 
       $("#recipe-unique-id-input").val(null);
@@ -152,7 +153,7 @@ $(function() {
     $('#recipe-title').text('');
     $('#recipe-description').text('');
     $('#recipe-ingredients-title').text('');
-    $('#recipe-craft-button').text('');
+    $('#recipe-craft-button').hide();
     $('#recipe-insufficient-knowledge-title').text('');
     $("#recipe-insufficient-knowledge-description").text('');
     $("#recipe-insufficient-knowledge-button").text('');
@@ -215,7 +216,7 @@ $(function() {
     $('#recipe-title').text('');
     $('#recipe-description').text('');
     $('#recipe-ingredients-title').text('');
-    $('#recipe-craft-button').text('');
+    $('#recipe-craft-button').hide();
     $('#recipe-insufficient-knowledge-title').text('');
     $("#recipe-insufficient-knowledge-description").text('');
     $("#recipe-insufficient-knowledge-button").text('');
