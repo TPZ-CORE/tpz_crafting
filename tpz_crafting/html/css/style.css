@@ -199,9 +199,9 @@ body {
 
   opacity: 0.7;
 
-  filter: grayscale(1) blur(1px) contrast(1.2) sepia(1);
-  -webkit-mask: radial-gradient(#000, #0009);
-
+  filter: grayscale(0.2) sepia(0.2) contrast(1.2) saturate(1.4) hue-rotate(-10deg) blur(1px);
+    -webkit-mask: radial-gradient(#000, #0009);
+    
   border: 2px solid rgba(37, 37, 37, 0.775);
 }
 
@@ -303,14 +303,20 @@ body {
   color: rgba(31, 31, 31, 0.747);
 
   font-size: 1.4vw;
-  font-weight: bold;
+  font-weight:900;
 
-	width: fit-content;
-  height: fit-content;
+	width: 18vw;
+  height: 1.7vw;
 
-  margin-top: 31.4vw;
-  margin-left: 37.5vw;
-	text-align: left;
+  padding-top: 0.3vw;
+
+  margin-top: 32vw;
+  margin-left: 36.05vw;
+	text-align: center;
+
+  letter-spacing: 1px;
+
+  background-color: rgba(161, 133, 79, 0.295);
 }
 
 #recipe-craft-button:hover {
