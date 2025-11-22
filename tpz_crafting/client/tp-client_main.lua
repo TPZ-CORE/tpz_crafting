@@ -13,6 +13,14 @@ local PlayerData = {
 
 
 -----------------------------------------------------------
+-- Exports
+-----------------------------------------------------------
+
+exports('OpenCraftingByName', function(name) 
+    OpenCraftingByLocationIndex(name)
+end)
+
+-----------------------------------------------------------
 -- Local Functions
 -----------------------------------------------------------
 
@@ -232,3 +240,4 @@ CreateThread(function()
         Wait(sleep)
     end
 end)
+
