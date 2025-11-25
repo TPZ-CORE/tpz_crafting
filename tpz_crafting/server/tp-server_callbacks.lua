@@ -1,4 +1,5 @@
 
+local TPZ    = exports.tpz_core:getCoreAPI()
 local TPZInv = exports.tpz_inventory:getInventoryAPI()
 
 -----------------------------------------------------------
@@ -7,6 +8,13 @@ local TPZInv = exports.tpz_inventory:getInventoryAPI()
 
 exports.tpz_core:getCoreAPI().addNewCallBack("tpz_crafting:canCraftRecipe", function(source, cb, data)
   local _source      = source
+    
+  local xPlayer = TPZ.GetPlayer(_source)
+
+  if xPlayer.hasLostConnection() then
+    return 
+  end
+    
   local DoesRecipeExist, recipe = DoesRecipeExist(data.item)
 
   -- If for some reason the recipe does not exist, we return false.
@@ -130,6 +138,12 @@ end)
 
 exports.tpz_core:getCoreAPI().addNewCallBack("tpz_crafting:startReadingRecipe", function(source, cb, data)
   local _source = source
+    
+  local xPlayer = TPZ.GetPlayer(_source)
+
+  if xPlayer.hasLostConnection() then
+    return 
+  end
 
   local itemQuantity = TPZInv.getItemQuantity(_source, data.blueprint)
 
