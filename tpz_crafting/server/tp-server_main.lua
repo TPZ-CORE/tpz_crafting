@@ -75,7 +75,11 @@ RegisterServerEvent("tpz_crafting:server:repairCrafting")
 AddEventHandler("tpz_crafting:server:repairCrafting", function(category, item, itemId)
   local _source = source
   local xPlayer = TPZ.GetPlayer(_source)
-
+		
+  if xPlayer.hasLostConnection() then
+    return 
+  end
+		
   local identifier = xPlayer.getIdentifier()
   local charIdentifier = xPlayer.getCharacterIdentifier()
   local steamName = GetPlayerName(_source)
@@ -108,7 +112,11 @@ RegisterServerEvent("tpz_crafting:server:receiveCraftingRecipe")
 AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(category, item)
   local _source = source
   local xPlayer = TPZ.GetPlayer(_source)
-
+		
+  if xPlayer.hasLostConnection() then
+    return 
+  end
+		
   local identifier = xPlayer.getIdentifier()
   local charIdentifier = xPlayer.getCharacterIdentifier()
   local steamName = GetPlayerName(_source)
@@ -176,6 +184,11 @@ end)
 RegisterServerEvent("tpz_crafting:server:pickupPlacedObject")
 AddEventHandler("tpz_crafting:server:pickupPlacedObject", function(ingredients)
   local _source  = source
+  local xPlayer = TPZ.GetPlayer(_source)
+
+  if xPlayer.hasLostConnection() then
+    return 
+  end
 
   local length   = GetTableLength(ingredients)
 
@@ -288,4 +301,5 @@ Citizen.CreateThread(function()
     end
 
 end)
+
 
