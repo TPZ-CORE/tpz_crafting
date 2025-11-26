@@ -64,10 +64,6 @@ $(function() {
         $('#recipe-craft-button').show();
       }
 
-      $("#recipe-unique-id-input").val(null);
-      
-      (prod_recipe.IsRepairable == null || !prod_recipe.IsRepairable) ? $("#recipe-unique-id-input").hide() : $("#recipe-unique-id-input").show();
-
       $("#recipe-image-background").hide();
       document.getElementById("recipe-image-background").style.backgroundImage = null;
 
@@ -75,6 +71,8 @@ $(function() {
 
       $('#recipe-title').text(prod_recipe.Label);
       $('#recipe-description').text(prod_recipe.RecipeInformation);
+
+      IS_REPAIRABLE = Boolean(prod_recipe.IsRepairable);
   
       if (prod_recipe.BackgroundImage) {
 
@@ -135,6 +133,9 @@ $(function() {
   -----------------------------------------------------------*/
 
   function OnBackButtonAction(){
+
+    if (HAS_REPAIR_DIALOG_ACTIVE) return;
+    
     playAudio("button_click.wav");
 
     $('#recipes').html('');
@@ -170,6 +171,9 @@ $(function() {
 
   // @categories-label : Displaying category recipes.
   $("#crafting").on("click", "#categories-label", function() {
+
+    if (HAS_REPAIR_DIALOG_ACTIVE) return;
+
     playAudio("button_click.wav");
 
     var $button    = $(this);
@@ -234,21 +238,53 @@ $(function() {
 
   $("#crafting").on("click", "#recipe-craft-button", function() {
 
-    if (HasCooldown) { return; }
-    HasCooldown = true;
+    if (HasCooldown || HAS_REPAIR_DIALOG_ACTIVE ) { return; }
 
     playAudio("button_click.wav");
 
-    let $uniqueId = $("#recipe-unique-id-input").val();
+    if (IS_REPAIRABLE) {
+      $("#repair-title").text($("#recipe-title").text());
+      $("#repair-description").text(Locales.RepairDescription);
+      $("#repair-accept-button").text(Locales.RepairButtonAccept);
+      $("#repair-unique-id-input").val('');
+      $(".repair-dialog").fadeIn();
 
-    $.post("http://tpz_crafting/craftSelectedRecipe", JSON.stringify({ uniqueId : $uniqueId  }));
+      HAS_REPAIR_DIALOG_ACTIVE = true;
 
+    }else{
+      $.post("http://tpz_crafting/craftSelectedRecipe", JSON.stringify({ uniqueId: 0 }));
+    }
+
+  });
+
+  $("#crafting").on("click", "#repair-accept-button", function () {
+
+    playAudio("button_click.wav");
+
+    $(".repair-dialog").fadeOut();
+    HAS_REPAIR_DIALOG_ACTIVE = false;
+    HasCooldown = false;
+
+    $.post("http://tpz_crafting/craftSelectedRecipe", JSON.stringify({ uniqueId: $("#repair-unique-id-input").val() }));
+
+    $("#repair-unique-id-input").val('');
+
+  });
+
+
+  $("#crafting").on("click", "#repair-cancel-button", function () {
+
+    playAudio("button_click.wav");
+
+    $(".repair-dialog").fadeOut();
+
+    HAS_REPAIR_DIALOG_ACTIVE = false;
   });
 
 
   $("#crafting").on("click", "#recipe-insufficient-knowledge-button", function() {
 
-    if (HasCooldown) { return; }
+    if (HasCooldown || HAS_REPAIR_DIALOG_ACTIVE ) { return; }
     HasCooldown = true;
 
     playAudio("button_click.wav");
