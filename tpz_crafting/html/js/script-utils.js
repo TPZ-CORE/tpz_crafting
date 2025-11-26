@@ -6,6 +6,9 @@ let SELECTED_RECIPE_DIV_CLASS   = null;
 let MAIN_NUI_HEADER_TITLE       = null;
 let MAIN_NUI_HEADER_DESCRIPTION = null;
 
+let HAS_REPAIR_DIALOG_ACTIVE    = false;
+let IS_REPAIRABLE               = false;
+
 const loadScript = (FILE_URL, async = true, type = "text/javascript") => {
   return new Promise((resolve, reject) => {
       try {
@@ -44,6 +47,9 @@ loadScript("js/locales/locales-" + Config.Locale + ".js").then( data  => {
 
   displayPage("selectedrecipepage", "visible");
   $(".selectedrecipepage").fadeOut();
+
+  displayPage("repair-dialog", "visible");
+  $(".repair-dialog").fadeOut();
 
   displayPage("notification", "visible");
   $(".notification").fadeOut();
