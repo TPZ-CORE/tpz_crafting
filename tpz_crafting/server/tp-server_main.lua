@@ -90,7 +90,7 @@ AddEventHandler("tpz_crafting:server:repairCrafting", function(category, item, i
   if not DoesRecipeExist or item == nil then
 
     if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
-      local _w, _c      = Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Url, Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
+      local _w, _c      = TPZ.GetWebhookUrl('tpz_crafting', 'DEVTOOLS_INJECTION_CHEAT'), Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
       local description = 'The specified user attempted to use devtools / injection cheat on stores for crafting - repairing products.'
       TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, steamName, fullname, identifier, charIdentifier, description, _c)
     end
@@ -127,7 +127,7 @@ AddEventHandler("tpz_crafting:server:receiveCraftingRecipe", function(category, 
   if not DoesRecipeExist or item == nil then
 
     if Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Enabled then
-      local _w, _c      = Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Url, Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
+      local _w, _c      = TPZ.GetWebhookUrl('tpz_crafting', 'DEVTOOLS_INJECTION_CHEAT'), Config.Webhooks['DEVTOOLS_INJECTION_CHEAT'].Color
       local description = 'The specified user attempted to use devtools / injection cheat on stores for buying products.'
       TPZ.SendToDiscordWithPlayerParameters(_w, Locales['DEVTOOLS_INJECTION_DETECTED_TITLE_LOG'], _source, steamName, fullname, identifier, charIdentifier, description, _c)
     end
@@ -301,5 +301,6 @@ Citizen.CreateThread(function()
     end
 
 end)
+
 
 
