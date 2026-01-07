@@ -309,8 +309,8 @@ Config.CraftingRecipes = {
         Duration          = 15, 
 
         Ingredients       = { 
-            { item = 'rock', required_quantity = 6 },
-            { item = 'wooden_sticks', required_quantity = 6 },
+            { item = 'rock', required_quantity = 6, return_quantity = 3 }, -- return_quantity only for IsBuildables!
+            { item = 'wooden_sticks', required_quantity = 6, return_quantity = 3  }, -- return_quantity only for IsBuildables!
         },
     
         ReturnItems = {
@@ -346,11 +346,11 @@ Config.CraftingRecipes = {
         Duration          = 30, 
 
         Ingredients       = { 
-            { item = 'wooden_sticks', required_quantity = 10 },
-            { item = 'wooden_planks', required_quantity = 20 },
-            { item = 'fabric',        required_quantity = 10 },
-            { item = 'leather',       required_quantity = 10 },
-            { item = 'fibers',        required_quantity = 6 },
+            { item = 'wooden_sticks', required_quantity = 10, return_quantity = 5 }, -- return_quantity only for IsBuildables!
+            { item = 'wooden_planks', required_quantity = 20, return_quantity = 10 }, -- return_quantity only for IsBuildables!
+            { item = 'fabric',        required_quantity = 10, return_quantity = 5 }, -- return_quantity only for IsBuildables!
+            { item = 'leather',       required_quantity = 10, return_quantity = 5 }, -- return_quantity only for IsBuildables!
+            { item = 'fibers',        required_quantity = 6, return_quantity = 3 }, -- return_quantity only for IsBuildables!
         },
 
         ReturnItems = {
@@ -971,5 +971,6 @@ function SendNotification(source, message, messageType)
     end
   
 end
+
 
 
