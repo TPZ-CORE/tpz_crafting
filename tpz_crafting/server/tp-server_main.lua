@@ -183,26 +183,31 @@ end)
 -- that have been used for the craft.
 RegisterServerEvent("tpz_crafting:server:pickupPlacedObject")
 AddEventHandler("tpz_crafting:server:pickupPlacedObject", function(ingredients)
-  local _source  = source
+  local _source = source
   local xPlayer = TPZ.GetPlayer(_source)
 
   if xPlayer.hasLostConnection() then
     return 
   end
 
-  local length   = GetTableLength(ingredients)
+  local length = GetTableLength(ingredients)
 
-  if length <= 0 or ingredients == nil then
+  if ingredients == nil or ingredients and length <= 0 then
     -- how can ingredients be null?
     return
   end
 
   local totalWeight = 0
 
-  for item, quantity in pairs(ingredients) do
+  for _, ingredient in pairs(ingredients) do
 
-    local itemWeight = TPZInv.getItemWeight(item)
-    totalWeight      = totalWeight + (itemWeight * quantity)
+    if ingredient.return_quantity and ingredient.return_quantity > 0 then
+
+      local itemWeight = TPZInv.getItemWeight(ingredient.item)
+      totalWeight      = totalWeight + (itemWeight * ingredient.return_quantity)
+
+    end
+
   end
 
   -- @param totalWeight is the input weight you want to check if player inventory can carry.
@@ -213,9 +218,16 @@ AddEventHandler("tpz_crafting:server:pickupPlacedObject", function(ingredients)
     return
   end
 
-  for item, quantity in pairs (ingredients) do
-    TPZInv.addItem(_source, item, quantity)
+  for _, ingredient in pairs (ingredients) do
+    
+    if ingredient.return_quantity and ingredient.return_quantity > 0 then
+
+      TPZInv.addItem(_source, ingredient.item, ingredient.return_quantity)
+    end
+
   end
+
+  --SendNotification(_source, message, 'success')
 
 end)
  
@@ -301,6 +313,7 @@ Citizen.CreateThread(function()
     end
 
 end)
+
 
 
 
