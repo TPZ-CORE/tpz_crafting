@@ -514,7 +514,7 @@ RegisterNUICallback('craftSelectedRecipe', function(data)
                 PerformCraftingAction(playerPed, animationType, recipe)
 
                 if not recipe.IsBuildable then
-                    TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", item)
+                    TriggerServerEvent("tpz_crafting:server:receiveCraftingRecipe", SELECTED_CRAFTING_CATEGORY, item)
                     
                 elseif recipe.IsRepairable then
                     TriggerServerEvent("tpz_crafting:server:repairCrafting", SELECTED_CRAFTING_CATEGORY, item, data.uniqueId)
@@ -530,3 +530,4 @@ end)
 RegisterNUICallback('close', function()
 	ToggleNUI(false)
 end)
+
